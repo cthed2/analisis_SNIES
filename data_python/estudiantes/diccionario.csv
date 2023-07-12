@@ -1,0 +1,49 @@
+VARIABLE;DESCRIPCION
+Código de la Institución;
+IES PADRE;Código de la IES PADRE
+Institución de Educación Superior (IES);Nombre de la institución educativa
+Principal o Seccional;
+ID Sector IES;Oficial = 1, Privada=2 
+Sector IES;Sector al que pertenece la IES
+ID Caracter ;Número único de cada carácter
+Caracter IES;'Universidad', 
+'Institución Tecnológica',;
+'Institución Universitaria/Escuela Tecnológica',;
+'Institución Técnica Profesional';
+Código del departamento (IES);Número único de cada departamento
+Departamento de domicilio de la IES;Región en la que ubica la (IES)
+Código del Municipio (IES);Número único que identifica al municipio
+Municipio de domicilio de la IES;Nombre de municipio al que pertenece la (IES)
+Código SNIES del programa;Número único que hace referencia al programa
+Programa Académico;Nombre del programa académico
+ID Nivel Académico;Número único de cada nivel
+Nivel Académico;'Posgrado', 
+'Pregrado', ;
+'No Aplica';
+ID Nivel de Formación;'Número único que identifica el nivel de formación
+Nivel de Formación;'Especialización', 
+'Doctorado', ;
+'Universitaria',;
+'Especialización Médico Quirúrgica',;
+ 'Especialización Universitaria', ;
+'Maestría', ;
+'Tecnológica',;
+'Formación Técnica Profesional', ;
+'Especialización Tecnológica',;
+'Especialización Técnico Profesional', 'No Aplica',;
+'Sin Programa Específico';
+ID Metodología;Número único que identifica la metodología
+Metodología;'Presencial', 'Distancia
+ID Área;Código del área de conocimiento
+Área de Conocimiento;
+Id_Nucleo;Código del núcleo de conocimientos
+Núcleo Básico del Conocimiento (NBC);
+Código del Departamento (Programa);
+Departamento de oferta del programa;
+Código del Municipio (Programa);
+Municipio de oferta del programa;
+ID Sexo;Código 1 = hombre, 2 = mujer
+Sexo;Sexo del estudiante (hombre, mujer)
+Año;Año de la inscripción 
+Semestre;Semestre del año
+ Inscripciones;Numero de inscripciones 

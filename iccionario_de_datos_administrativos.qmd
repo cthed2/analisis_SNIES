@@ -1,0 +1,59 @@
+---
+title: "Diccionario de datos"
+format: html
+---
+
+## Administrativos
+
+Representa a todas aquellas personas diferentes a los docentes, 
+salvo aquellos que dentro de sus funciones también desarrollen actividades 
+administrativas, que soportan las actividades organizacionales relacionadas 
+con la prestación del servicio público educativo en las instituciones de educación 
+superior.
+
+La pagina de los datos es: <https://snies.mineducacion.gov.co/portal/ESTADISTICAS/Bases-consolidadas/>.
+
+## Columna de datos
+
+**Codigo de la institucion:**Codigo de la institucion a la cual pertenece el administrador
+
+**IES padre:**Codigo IES padre
+
+**Institucion de educacion superior(IES):**Nombre de la institucion a la que pertennece el administrador
+
+**Principal o seccional:**principal se refiere a la sede principal y seccional a una sede secundaria
+
+**ID Sector IES:**Codigo del sector a la que pertenece el administrador
+
+**Sector IES:** Sector del administrador
+
+**ID caracter IES:**Codigo del caracter de institucion
+
+**Caracter IES:**Hay 4 caracteres a la que pertenecen las instituciones
+
+**Codigo del departamento (IES)**Codigo del depeartamento en a quee esta ubicado la institucioon
+
+**Departamento del domicilio de la IES :**Departamento donde sta ubicada la institucion
+
+**Codigo del municipio (IES):**Codigoo del municipio de la institucion
+
+**Municiopio del domicilio IES:**Nombre del municipio de la institucion 
+
+**Anio:**Anio de prestacion de servicio del administrador
+
+**Semestre**Se refiere al primer o segundo semestre
+
+**Auxiliar:**Personal auxiliar de adm
+
+**Tecnico:**Personal tecnico de admi
+
+**Profesional:**Personal profesional del area
+
+**Directivo:**Personal directivo 
+
+**Total:**Total de personales del area administrativa
+
+
+```{r}
+administrativos2014 <- read.csv("./Datasets/Administrativos/admin2014.csv", sep = ";", skip = 6)
+```

@@ -45,17 +45,32 @@ for (nombre_df in nombres_dataframes) {
   # Asignar el dataframe transformado al nombre original
   assign(nombre_df, df)
 }
+#------------------------------------------------------------------------
+# Función para eliminar acentos de una cadena
+eliminar_acentos <- function(cadena) {
+  iconv(cadena, to = "ASCII//TRANSLIT")
+}
+
+# Aplicar la función a todas las columnas del dataframe
+data2014 <- data.frame(lapply(data2014, eliminar_acentos), stringsAsFactors = FALSE)
+data2015 <- data.frame(lapply(data2015, eliminar_acentos), stringsAsFactors = FALSE)
+data2016 <- data.frame(lapply(data2016, eliminar_acentos), stringsAsFactors = FALSE)
+data2017 <- data.frame(lapply(data2017, eliminar_acentos), stringsAsFactors = FALSE)
+data2018 <- data.frame(lapply(data2018, eliminar_acentos), stringsAsFactors = FALSE)
+data2019 <- data.frame(lapply(data2019, eliminar_acentos), stringsAsFactors = FALSE)
+data2020 <- data.frame(lapply(data2020, eliminar_acentos), stringsAsFactors = FALSE)
+data2021 <- data.frame(lapply(data2021, eliminar_acentos), stringsAsFactors = FALSE)
 
 #------------------------------------------------------------------------
 #Cambiamos de nombre las columnas que generan conflicto al momento de concatenar
-colnames(data2014)[colnames(data2014) == "servicios"] <- "servicios técnicos"
-colnames(data2015)[colnames(data2015) == "servicios"] <- "servicios técnicos"
-colnames(data2016)[colnames(data2016) == "servicios"] <- "servicios técnicos"
-colnames(data2017)[colnames(data2017) == "técnico"] <- "servicios técnicos"
-colnames(data2018)[colnames(data2018) == "tecnico"] <- "servicios técnicos"
-colnames(data2019)[colnames(data2019) == "técnico"] <- "servicios técnicos"
-colnames(data2020)[colnames(data2020) == "técnico"] <- "servicios técnicos"
-colnames(data2021)[colnames(data2021) == "técnico"] <- "servicios técnicos"
+colnames(data2014)[colnames(data2014) == "servicios"] <- "servicios.técnicos"
+colnames(data2015)[colnames(data2015) == "servicios"] <- "servicios.técnicos"
+colnames(data2016)[colnames(data2016) == "servicios"] <- "servicios.técnicos"
+colnames(data2017)[colnames(data2017) == "técnico"] <- "servicios.técnicos"
+colnames(data2018)[colnames(data2018) == "tecnico"] <- "servicios.técnicos"
+colnames(data2019)[colnames(data2019) == "técnico"] <- "servicios.técnicos"
+colnames(data2020)[colnames(data2020) == "técnico"] <- "servicios.técnicos"
+colnames(data2021)[colnames(data2021) == "técnico"] <- "servicios.técnicos"
 
 colnames(data2018)[colnames(data2018) == "principal..o..seccional"] <- "principal..o.seccional"
 colnames(data2019)[colnames(data2019) == "principal..o..seccional"] <- "principal..o.seccional"
@@ -74,8 +89,7 @@ colnames(data2021)[colnames(data2021) == "departamento.de.domicilio.de.la.ies"] 
 colnames(data2021)[colnames(data2021) == "id.carácter.ies"] <- "id.caracter.ies"
 colnames(data2021)[colnames(data2021) == "carácter.ies"] <- "caracter.ies"
 
-
-
+#--------------------------------------------------------------------------------------------------
 
 # Vamos a concatenar todos los archivos en uno solo
 
@@ -90,18 +104,14 @@ df_concatenado <- rbind(df_concatenado, data2018)
 df_concatenado <- rbind(df_concatenado, data2019)
 df_concatenado <- rbind(df_concatenado, data2020)
 df_concatenado <- rbind(df_concatenado, data2021)
+#--------------------------------------------------------------------------------
 
-
-#Guardamos el dataframe en csv para despues hacer limpieza
-ruta <- "Datasets/Administrativos/"
-
-nombre_archivo <- "administrativos2014-2021.csv"
-
-write.csv(df_concatenado, file = paste0(ruta, nombre_archivo), row.names = FALSE)
 
 # Vemos los nulos que tiene: vemos que el dataframe no tien nulos ni faltantes
 nulos_por_columna <- colSums(is.na(df_concatenado))
 print(nulos_por_columna)
+
+#-------------------------------------------------------------------------------
 
 # Vemos los valores quetiene cada columna: vemos que tiene un valor no adecuado "#n/d" y lo reeamplazamos por prricipal
 valores_unicos <- unique(df_concatenado$principal..o.seccional)
@@ -110,21 +120,36 @@ print(valores_unicos)
 # Reemplazamos "#n/d" 
 df_concatenado$principal..o.seccional <- ifelse(df_concatenado$principal..o.seccional == "#n/d", "principal", df_concatenado$principal..o.seccional)
 
-# Vemos que en la columna de caracter.ies hay valopres q se repiten lo cual tiene q ser unico
-valores_unicos <- unique(df_concatenado$municipio.de.domicilio.de.la.ies)
-print(valores_unicos)
+#---------------------------------------------------------------------------------
+# Verificamos que el tipo de dato este correcto en todo el dataframe: debemos corregir los tipos de datos a numeric
+tipos_de_datos <- sapply(df_concatenado, class)
+print(tipos_de_datos)
 
-# Reemplazamos los valores por los correctos
-df_concatenado$caracter.ies <- ifelse(df_concatenado$caracter.ies == "institución universitaria/escuela tecnológica", "institucion universitaria/escuela tecnologica", df_concatenado$caracter.ies)
-df_concatenado$caracter.ies <- ifelse(df_concatenado$caracter.ies == "institución tecnológica", "institucion tecnologica", df_concatenado$caracter.ies)
-df_concatenado$caracter.ies <- ifelse(df_concatenado$caracter.ies == "institución técnica profesional", "institucion tecnica profesional", df_concatenado$caracter.ies)
+# corregir las columnas numericas
+df_concatenado$código.de..la.institución <- as.numeric(df_concatenado$código.de..la.institución)
+df_concatenado$ies.padre <- as.numeric(df_concatenado$ies.padre)
+df_concatenado$id.sector.ies <- as.numeric(df_concatenado$id.sector.ies)
+df_concatenado$id.caracter.ies <- as.numeric(df_concatenado$id.caracter.ies)
+df_concatenado$código.del..departamento..ies. <- as.numeric(df_concatenado$código.del..departamento..ies.)
+df_concatenado$código.del..municipio..ies. <- as.numeric(df_concatenado$código.del..municipio..ies.)
+df_concatenado$año <- as.numeric(df_concatenado$año) # anio
+df_concatenado$semestre <- as.numeric(df_concatenado$semestre)
+df_concatenado$auxiliar <- as.numeric(df_concatenado$auxiliar)
+df_concatenado$servicios.técnicos <- as.numeric(df_concatenado$servicios.técnicos)
+df_concatenado$profesional <- as.numeric(df_concatenado$profesional)
+df_concatenado$directivo <- as.numeric(df_concatenado$directivo)
+df_concatenado$total <- as.numeric(df_concatenado$total)
 
+#--------------------------------------------------------------------------------
+#le sacamos las tildes a los nombres de la columna
 
-# Función para eliminar acentos de una cadena
-eliminar_acentos <- function(cadena) {
-  iconv(cadena, to = "ASCII//TRANSLIT")
-}
+colnames(df_concatenado) <- iconv(colnames(df_concatenado), "UTF-8", "ASCII//TRANSLIT")
+colnames(df_concatenado)
+#--------------------------------------------------------------------------------
+#Guardamos el dataframe en csv para despues hacer limpieza
+ruta <- "Datasets/Administrativos/"
 
-# Aplicar la función a todas las columnas del dataframe
-data2021 <- data.frame(lapply(data2021, eliminar_acentos), stringsAsFactors = FALSE)
+nombre_archivo <- "administrativos2014-2021.csv"
+
+write.csv(df_concatenado, file = paste0(ruta, nombre_archivo), row.names = FALSE)
 

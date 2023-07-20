@@ -15,4 +15,3 @@ Antes de utilizar este proyecto, asegúrate de tener instalados los siguientes c
 - Python 3.x
 - Biblioteca Selenium
 - Navegador Chrome y ChromeDriver
-

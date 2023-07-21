@@ -1,0 +1,100 @@
+---
+title: "Prueba"
+output: html_document 
+---
+
+
+# Visualización de datos
+
+Se cargaran dataset de los alumnos inscritos desde el 2013 al 2021.
+
+```{r}
+# Visualización de los dataset 2014
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2014 <- read_excel("inscritos_2014.xlsx", 
+    sheet = "Inscritos_2014", skip = 6)
+inscritos_2014 <- clean_names(inscritos_2014)
+glimpse(inscritos_2014)
+```
+
+```{r}
+# Visualización de los dataset 2015
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2015 <- read_excel("inscritos_2015.xlsx", 
+    sheet = "Inscritos_2015", skip = 6)
+inscritos_2015 <- clean_names(inscritos_2015)
+glimpse(inscritos_2015)
+```
+
+```{r}
+# Visualización de los dataset 2016
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2016 <- read_excel("inscritos_2016.xlsx", 
+    sheet = "Inscritos_2016", skip = 6)
+inscritos_2016 <- clean_names(inscritos_2016)
+glimpse(inscritos_2016)
+```
+*Observación:* Hay elementos en la tabla anterior que para los cuales es necesario un analisis: NO ESPECIFICA PROGRAMA, NO APLICA.
+
+```{r}
+# Visualización de los dataset 2017
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2017 <- read_excel("inscritos_2017.xlsx",
+    sheet = "Inscritos_2017", skip = 6)
+  inscritos_2017 <- clean_names(inscritos_2017)
+glimpse(inscritos_2017)
+```
+
+```{r}
+# Visualización de los dataset 2018
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2018 <- read_excel("inscritos_2018.xlsx",
+    sheet = "Inscritos_2018", skip = 7)
+  inscritos_2018 <- clean_names(inscritos_2018)
+glimpse(inscritos_2018)
+```
+
+```{r}
+# Visualización de los dataset 2019
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2019 <- read_excel("inscritos_2019.xlsx",
+    sheet = "Inscritos_2019", skip = 9)
+  inscritos_2019 <- clean_names(inscritos_2019)
+glimpse(inscritos_2019)
+```
+
+```{r}
+# Visualización de los dataset 2020
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2020 <- read_excel("inscritos_2020.xlsx",
+    sheet = "Inscritos_2020", skip = 9)
+  inscritos_2020 <- clean_names(inscritos_2020)
+glimpse(inscritos_2020)
+```
+*Observación:* Apartir del año 2020 se han agregado 6 nuevos elementos a los registros
+```{r}
+# Visualización de los dataset 2021
+library(readxl)
+library(dplyr)
+library(janitor)
+inscritos_2021 <- read_excel("inscritos_2021.xlsx",
+    sheet = "Inscritos_2021", skip = 10)
+  inscritos_2021 <- clean_names(inscritos_2021)
+glimpse(inscritos_2021)
+```
+
+

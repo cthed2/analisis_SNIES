@@ -153,3 +153,7 @@ nombre_archivo <- "administrativos2014-2021.csv"
 
 write.csv(df_concatenado, file = paste0(ruta, nombre_archivo), row.names = FALSE)
 
+
+# cambioo
+
+# cambio2

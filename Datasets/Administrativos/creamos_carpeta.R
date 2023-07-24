@@ -2,7 +2,7 @@
 
 library(readr)
 #lectura de los 8 archivos csv desde el anio 2014 hasta 2021
-data2014 <- read.csv("./Datasets/Administrativos/admin2014.csv", sep = ";", skip = 7)
+data2014 <- read.csv("./Datasets/Administrativos/admin2014.csv", sep = ";", skip = 7) # el nombre del dataframe debe ser mas descriptivo (administrativos)
 
 data2015 <- read.csv("./Datasets/Administrativos/admin2015.csv", sep = ";", skip = 7)
 
@@ -18,7 +18,7 @@ data2020 <- read.csv("./Datasets/Administrativos/admin2020.csv", sep = ";", skip
 
 data2021 <- read.csv("./Datasets/Administrativos/admin2021.csv", sep = ";", skip = 6)
 
-# Vemosm los nombres de la columna: vemos que en la data de 2027 hay una columa de mas
+# Vemos los nombres de la columna: vemos que en la data de 2027 hay una columa de mas
 colnames(data2017)
 
 #eliminamos la coumna x de data2027
@@ -153,7 +153,34 @@ nombre_archivo <- "administrativos2014-2021.csv"
 
 write.csv(df_concatenado, file = paste0(ruta, nombre_archivo), row.names = FALSE)
 
+#-------------------------------------------------------------------------------
+# ANALISIS EXPLORATORIO DE DATOS (EDA)
 
-# cambioo
+#instalamos libreria necesaria
+install.packages("ggplot2")
 
-# cambio2
+library(ggplot2)
+# Cargamos los datos del archivo administrativos
+datos_adminstrativos <- read.csv("Datasets/Administrativos/administrativos2014-2021.csv")
+
+tipos_de_datos <- sapply(datos_adminstrativos, class)
+print(tipos_de_datos)
+
+#obtenemos un resumen estadisticco de los datos
+summary(datos_adminstrativos)
+
+#grafico de dispersion
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = servicios.tecnicos)) +
+  geom_point()
+
+ggplot(datos_adminstrativos, aes(x = codigo.de..la.institucion, y = directivo)) +
+  geom_point()
+
+# Histograma 
+ggplot(datos_adminstrativos, aes(x = codigo.de..la.institucion)) +
+  geom_histogram(binwidth = 1)
+
+
+# Graficod de barras
+ggplot(datos_adminstrativos, aes(x = ano)) +
+  geom_bar()

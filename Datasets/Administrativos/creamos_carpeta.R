@@ -170,17 +170,71 @@ print(tipos_de_datos)
 summary(datos_adminstrativos)
 
 #grafico de dispersion
+
 ggplot(datos_adminstrativos, aes(x = auxiliar, y = servicios.tecnicos)) +
   geom_point()
 
-ggplot(datos_adminstrativos, aes(x = codigo.de..la.institucion, y = directivo)) +
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = profesional)) +
+  geom_point()
+
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = directivo)) +
+  geom_point()
+
+ggplot(datos_adminstrativos, aes(x = directivo, y = auxiliar)) +
+  geom_point()
+
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = total)) +
+  geom_point()
+
+ggplot(datos_adminstrativos, aes(x = total, y = auxiliar)) +
+  geom_point()
+
+ggplot(datos_adminstrativos, aes(x = total, y = profesional)) +
   geom_point()
 
 # Histograma 
-ggplot(datos_adminstrativos, aes(x = codigo.de..la.institucion)) +
+ggplot(datos_adminstrativos, aes(x = id.caracter.ies)) +
   geom_histogram(binwidth = 1)
 
+ggplot(datos_adminstrativos, aes(x = codigo.del..departamento..ies.)) +
+  geom_histogram(binwidth = 1)
 
-# Graficod de barras
 ggplot(datos_adminstrativos, aes(x = ano)) +
+  geom_histogram(binwidth = 1)
+
+ggplot(datos_adminstrativos, aes(x = auxiliar)) +
+  geom_histogram(binwidth = 1)
+
+ggplot(datos_adminstrativos, aes(x = servicios.tecnicos)) +
+  geom_histogram(binwidth = 1)
+
+ggplot(datos_adminstrativos, aes(x = directivo)) +
+  geom_histogram(binwidth = 1)
+
+ggplot(datos_adminstrativos, aes(x = profesional)) +
+  geom_histogram(binwidth = 1)
+
+ggplot(datos_adminstrativos, aes(x = total)) +
+  geom_histogram(binwidth = 1)
+
+# Grafico de barras
+ggplot(datos_adminstrativos, aes(x = ano)) +
+  geom_bar()
+
+ggplot(datos_adminstrativos, aes(x = institucion.de.educacion.superior..ies.)) +
+  geom_bar()
+
+ggplot(datos_adminstrativos, aes(x = principal..o.seccional)) +
+  geom_bar()
+
+ggplot(datos_adminstrativos, aes(x = sector.ies)) +
+  geom_bar()
+
+ggplot(datos_adminstrativos, aes(x = caracter.ies)) +
+  geom_bar()
+
+ggplot(datos_adminstrativos, aes(x = departamento.de..domicilio.de.la.ies)) +
+  geom_bar()
+
+ggplot(datos_adminstrativos, aes(x = municipio.de.domicilio.de.la.ies)) +
   geom_bar()

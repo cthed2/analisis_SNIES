@@ -169,33 +169,43 @@ print(tipos_de_datos)
 #obtenemos un resumen estadisticco de los datos
 summary(datos_adminstrativos)
 
+#-------------------------------------------------------------------------------
+
 #grafico de dispersion
 
 ggplot(datos_adminstrativos, aes(x = auxiliar, y = servicios.tecnicos)) +
   geom_point()
+# En el grafico podemos ver cierta relacion entre las variables pero no es una diagonal sino mas horizontal
+# pero tiene cierta pendiente positiva y tambien podemos ver algunos datos atipicos, lejanos a grupo
 
 ggplot(datos_adminstrativos, aes(x = auxiliar, y = profesional)) +
   geom_point()
+# vemos que la concentracion de los datos se encuentra entre 500 prof y 500 auxiliares
 
 ggplot(datos_adminstrativos, aes(x = auxiliar, y = directivo)) +
   geom_point()
+# este tieene una relacion mas horizontal osea no es buena la relacion 
 
 ggplot(datos_adminstrativos, aes(x = directivo, y = auxiliar)) +
   geom_point()
 
 ggplot(datos_adminstrativos, aes(x = auxiliar, y = total)) +
   geom_point()
-
+# vemos que tiene una linea diagonal que va desde la esquina inferior izquierda hasta la superior dereecha
+#varios valores atipicos 
 ggplot(datos_adminstrativos, aes(x = total, y = auxiliar)) +
   geom_point()
-
+# Este grafico representa mejor la linea diagonal con una relacion positiva
 ggplot(datos_adminstrativos, aes(x = total, y = profesional)) +
   geom_point()
+# en esta grafica podemos ve que tiene una linea diagonal un tanto en curva 
+#-------------------------------------------------------------------------------
 
 # Histograma 
 ggplot(datos_adminstrativos, aes(x = id.caracter.ies)) +
   geom_histogram(binwidth = 1)
-
+# 1 institucion tecica profesional 2: institucion tecnologica 
+# 3:Institución Universitaria/Escuela Tecnológica (es el masa frecuente)  4: Universidad
 ggplot(datos_adminstrativos, aes(x = codigo.del..departamento..ies.)) +
   geom_histogram(binwidth = 1)
 
@@ -216,6 +226,8 @@ ggplot(datos_adminstrativos, aes(x = profesional)) +
 
 ggplot(datos_adminstrativos, aes(x = total)) +
   geom_histogram(binwidth = 1)
+
+#-------------------------------------------------------------------------------
 
 # Grafico de barras
 ggplot(datos_adminstrativos, aes(x = ano)) +

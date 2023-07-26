@@ -1,0 +1,176 @@
+---
+title: "EDA"
+format: html
+---
+
+## Exploramos los datos de los administrativos de las Instituciones de Educación Superior del país, en los últimos años.
+
+El siguiente analisis de los datos de los administrativos se hizo con el fin de ver la informacion que nos propone que fue descargada de la siguiente pagina <https://snies.mineducacion.gov.co/portal/ESTADISTICAS/Bases-consolidadas/>.
+
+## Veremos los datos numericos con graficas de **dispersion** para ver la relacion q tienen las variables
+
+En este analisis nos enfocaremos en la relacion que tienen las variables en base a su direccion, fuerza, su forma del patron, outliers.
+
+### extraemos datos
+
+```{r}
+
+library(ggplot2)
+# Cargamos los datos del archivo administrativos
+datos_adminstrativos <- read.csv("Datasets/Administrativos/administrativos2014-2021.csv")
+datos_adminstrativos
+```
+
+### Tipo de datos de nuetro dataframe
+
+```{r}
+tipos_de_datos <- sapply(datos_adminstrativos, class)
+tipos_de_datos
+
+```
+
+### Resumen estadistico de los datos
+
+```{r}
+#obtenemos un resumen estadisticco de los datos
+summary(datos_adminstrativos)
+
+```
+
+# Graficos de dispersion 
+
+## Veremos los datos numericos con graficas de **dispersion** para ver la relacion q tienen las variables
+
+En este analisis nos enfocaremos en la relacion que tienen las variables en base a su direccion, fuerza, su forma del patron, outliers.
+
+### columna auxuliar y servicios tecnicos
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = servicios.tecnicos)) +
+  geom_point()
+```
+En esta grafica vemos que tiene una relacionn positiva pero no es una linea diagonal marcada sino mas orientada a ser horizontal, en relacion a la fuerza vemos que la concentracion de los puntos no es un a linea recta por lo cual tiene una relacion mas debil, en cuanto a los valores outliers observamos varios que estan lejos de la concentracion d elos datos lo cual se debe una exploracion mas completa
+
+### columna auxiliar y profesional
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = profesional)) +
+  geom_point()
+
+```
+En este caso vemos que en proporcio al numero de datos tenemos una linea diagonal positiva y que la fuerza esta concentrada en dicha linea lo cual nos confirmaria de una relacion lineal entre las variables con outliers bastante alejados de profesionales
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = directivo)) +
+  geom_point()
+
+```
+
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = auxiliar, y = total)) +
+  geom_point()
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = total, y = profesional)) +
+  geom_point()
+
+```
+# Graficos de Histograma
+```{r}
+ggplot(datos_adminstrativos, aes(x = id.caracter.ies)) +
+  geom_histogram(binwidth = 1)
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = codigo.del..departamento..ies.)) +
+  geom_histogram(binwidth = 1)
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = ano)) +
+  geom_histogram(binwidth = 1)
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = auxiliar)) +
+  geom_histogram(binwidth = 1)
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = servicios.tecnicos)) +
+  geom_histogram(binwidth = 1)
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = directivo)) +
+  geom_histogram(binwidth = 1)
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = profesional)) +
+  geom_histogram(binwidth = 1)
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = total)) +
+  geom_histogram(binwidth = 1)
+
+```
+# Grafico de barras
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = ano)) +
+  geom_bar()
+
+```
+
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = institucion.de.educacion.superior..ies.)) +
+  geom_bar()
+
+```
+
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = principal..o.seccional)) +
+  geom_bar()
+
+```
+
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = sector.ies)) +
+  geom_bar()
+
+```
+
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = caracter.ies)) +
+  geom_bar()
+
+```
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = departamento.de..domicilio.de.la.ies)) +
+  geom_bar()
+
+```
+
+
+```{r}
+ggplot(datos_adminstrativos, aes(x = municipio.de.domicilio.de.la.ies)) +
+  geom_bar()
+
+```
+

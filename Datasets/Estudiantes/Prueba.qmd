@@ -101,9 +101,22 @@ glimpse(inscritos_2021)
 
 ```{r}
 # Exploración inicial
-summary(inscritos_2014)
-str(inscritos_2014)
 
+# Los dataset del año 2014 al 2018 tienen 33 columnas
+ncol(inscritos_2014)
+# Los dataset del año 2019 al 2021 tienen 39 columnas
+ncol(inscritos_2019)
+```
+*Observación:* Se cosidera eliminar lac columnas adicionales
+```{r}
+# Eliminar columnas
+inscritos_2019 <- inscritos_2019[,-c(25:30)]
+inscritos_2020 <- inscritos_2020[,-c(25:30)]
+inscritos_2021 <- inscritos_2021[,-c(25:30)]
 ```
 
+```{r}
+# Eliminar filas del dataset inscritos_2016 que contienen datos como "SIN PROGRAMA ESPECÍFICO", y "No aplica"
+inscritos_2016 <- inscritos_2016[-(4211:4282), ]
+```
 

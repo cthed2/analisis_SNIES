@@ -97,4 +97,13 @@ inscritos_2021 <- read_excel("inscritos_2021.xlsx",
 glimpse(inscritos_2021)
 ```
 
+# Limpieza de datos
+
+```{r}
+# Exploración inicial
+summary(inscritos_2014)
+str(inscritos_2014)
+
+```
+
 

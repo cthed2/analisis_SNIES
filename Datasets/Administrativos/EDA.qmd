@@ -14,11 +14,10 @@ En este analisis nos enfocaremos en la relacion que tienen las variables en base
 ### extraemos datos
 
 ```{r}
-
-library(ggplot2)
+#library(ggplot2)
 # Cargamos los datos del archivo administrativos
-datos_adminstrativos <- read.csv("Datasets/Administrativos/administrativos2014-2021.csv")
-datos_adminstrativos
+#datos_adminstrativos <- read.csv("Datasets/Administrativos/administrativos2014-2021.csv")
+#datos_adminstrativos
 ```
 
 ### Tipo de datos de nuetro dataframe
@@ -26,7 +25,6 @@ datos_adminstrativos
 ```{r}
 tipos_de_datos <- sapply(datos_adminstrativos, class)
 tipos_de_datos
-
 ```
 
 ### Resumen estadistico de los datos
@@ -65,25 +63,30 @@ ggplot(datos_adminstrativos, aes(x = auxiliar, y = directivo)) +
   geom_point()
 
 ```
-
+Vemos en la grafico que no hay relacion positiva creciente o diagonal tenemos algunos valores outliers de directivos pero estas 2 variables no tiene buena relacion
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = auxiliar, y = total)) +
   geom_point()
 
 ```
+En este caso podemos ver que la relacion entre estas 2 variables es perfecta, tiene una una linea diagonal con relaccioin positiva y con los puntos perfectamente conecntrados en la linea co algunos valores outliers
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = total, y = profesional)) +
   geom_point()
 
 ```
+
+En este caso tambien tenemos buena relacion entre las variables 
+
 # Graficos de Histograma
 ```{r}
 ggplot(datos_adminstrativos, aes(x = id.caracter.ies)) +
   geom_histogram(binwidth = 1)
 
 ```
+En este histograma vemos que el caracter de la institucion que mas frecuente es el id 3 
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = codigo.del..departamento..ies.)) +
@@ -92,15 +95,47 @@ ggplot(datos_adminstrativos, aes(x = codigo.del..departamento..ies.)) +
 ```
 
 ```{r}
+library(dplyr)
+# Realizar el recuento y almacenar el resultado en una variable
+resultado <- datos_adminstrativos %>%
+  dplyr::count(codigo.del..departamento..ies., departamento.de..domicilio.de.la.ies)
+```
+```{r}
+knitr::kable(resultado)
+```
+
+```{r}
+# Utilizando el operador :: para asegurar que estamos usando la versión correcta de count
+datos_adminstrativos %>%
+  dplyr::count(codigo.del..departamento..ies., departamento.de..domicilio.de.la.ies) %>%
+  View()
+```
+
+
+```{r}
 ggplot(datos_adminstrativos, aes(x = ano)) +
   geom_histogram(binwidth = 1)
 
 ```
-
+En este caso vamos en la grafiac que el anio co mayot frecuencia de datos es el 2019
 ```{r}
 ggplot(datos_adminstrativos, aes(x = auxiliar)) +
   geom_histogram(binwidth = 1)
 ```
+
+```{r}
+# Cargamos el paquete dplyr si aún no lo hemos hecho
+library(dplyr)
+
+# Contamos los datos únicos en la columna 'nombre_columna'
+contador <- datos_adminstrativos %>% 
+            summarise(contador_datos_unicos = n_distinct(auxiliar))
+```
+
+```{r}
+contador
+```
+
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = servicios.tecnicos)) +
@@ -108,17 +143,20 @@ ggplot(datos_adminstrativos, aes(x = servicios.tecnicos)) +
 
 ```
 
+En esta grafica no podemos visualizar bien los datos
+
 ```{r}
 ggplot(datos_adminstrativos, aes(x = directivo)) +
   geom_histogram(binwidth = 1)
 
 ```
-
+Lo mismo que la anterior grafiac debemos buscar la forma de poder visualizar los datos de otra forma
 ```{r}
 ggplot(datos_adminstrativos, aes(x = profesional)) +
   geom_histogram(binwidth = 1)
 
 ```
+Lo mismo que el anterior
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = total)) +
@@ -132,12 +170,25 @@ ggplot(datos_adminstrativos, aes(x = ano)) +
   geom_bar()
 
 ```
-
+En este caso podemos observar que los datos mas marcados/columna mas frecuente es la del 2019
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = institucion.de.educacion.superior..ies.)) +
   geom_bar()
 
+```
+```{r}
+library(dplyr)
+# Realizar el recuento y almacenar el resultado en una variable
+resultad <- datos_adminstrativos %>%
+  dplyr::count(codigo.de..la.institucion, institucion.de.educacion.superior..ies.)
+```
+```{r}
+knitr::kable(resultad)
+```
+
+```{r}
+resultad
 ```
 
 
@@ -146,31 +197,46 @@ ggplot(datos_adminstrativos, aes(x = principal..o.seccional)) +
   geom_bar()
 
 ```
-
+En esta grafica vemos que la mayoria de losd datos (5000)son de principal
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = sector.ies)) +
   geom_bar()
 
 ```
-
+EN este caso vemos que casi 4000 de los datos  pertenecen al sector privado
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = caracter.ies)) +
   geom_bar()
 
 ```
+En esta grafica vemos que casi el 80% de los datos esta repartido entre institucion unicersitaria/escuela tecnologica y universidad
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = departamento.de..domicilio.de.la.ies)) +
   geom_bar()
 
 ```
-
+En este caso observamos que el departamentos que mas repite es bogota seguido de antioquia
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = municipio.de.domicilio.de.la.ies)) +
   geom_bar()
 
+```
+
+```{r}
+library(dplyr)
+# Realizar el recuento y almacenar el resultado en una variable
+result <- datos_adminstrativos %>%
+  dplyr::count(codigo.del..municipio..ies., municipio.de.domicilio.de.la.ies)
+```
+```{r}
+knitr::kable(result)
+```
+
+```{r}
+result
 ```
 

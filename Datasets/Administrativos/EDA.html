@@ -1,0 +1,3473 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>EDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="EDA_files/libs/clipboard/clipboard.min.js"></script>
+<script src="EDA_files/libs/quarto-html/quarto.js"></script>
+<script src="EDA_files/libs/quarto-html/popper.min.js"></script>
+<script src="EDA_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="EDA_files/libs/quarto-html/anchor.min.js"></script>
+<link href="EDA_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="EDA_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="EDA_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="EDA_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="EDA_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EDA</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="exploramos-los-datos-de-los-administrativos-de-las-instituciones-de-educación-superior-del-país-en-los-últimos-años." class="level2">
+<h2 class="anchored" data-anchor-id="exploramos-los-datos-de-los-administrativos-de-las-instituciones-de-educación-superior-del-país-en-los-últimos-años.">Exploramos los datos de los administrativos de las Instituciones de Educación Superior del país, en los últimos años.</h2>
+<p>El siguiente analisis de los datos de los administrativos se hizo con el fin de ver la informacion que nos propone que fue descargada de la siguiente pagina <a href="https://snies.mineducacion.gov.co/portal/ESTADISTICAS/Bases-consolidadas/" class="uri">https://snies.mineducacion.gov.co/portal/ESTADISTICAS/Bases-consolidadas/</a>.</p>
+</section>
+<section id="veremos-los-datos-numericos-con-graficas-de-dispersion-para-ver-la-relacion-q-tienen-las-variables" class="level2">
+<h2 class="anchored" data-anchor-id="veremos-los-datos-numericos-con-graficas-de-dispersion-para-ver-la-relacion-q-tienen-las-variables">Veremos los datos numericos con graficas de <strong>dispersion</strong> para ver la relacion q tienen las variables</h2>
+<p>En este analisis nos enfocaremos en la relacion que tienen las variables en base a su direccion, fuerza, su forma del patron, outliers.</p>
+<section id="extraemos-datos" class="level3">
+<h3 class="anchored" data-anchor-id="extraemos-datos">extraemos datos</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.3.1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos los datos del archivo administrativos</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>datos_adminstrativos <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./administrativos2014-2021.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tipo-de-datos-de-nuetro-dataframe" class="level3">
+<h3 class="anchored" data-anchor-id="tipo-de-datos-de-nuetro-dataframe">Tipo de datos de nuetro dataframe</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tipos_de_datos <span class="ot">&lt;-</span> <span class="fu">sapply</span>(datos_adminstrativos, class)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tipos_de_datos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              codigo.de..la.institucion                               ies.padre 
+                              "integer"                               "integer" 
+institucion.de.educacion.superior..ies.                  principal..o.seccional 
+                            "character"                             "character" 
+                          id.sector.ies                              sector.ies 
+                              "integer"                             "character" 
+                        id.caracter.ies                            caracter.ies 
+                              "integer"                             "character" 
+         codigo.del..departamento..ies.    departamento.de..domicilio.de.la.ies 
+                              "integer"                             "character" 
+            codigo.del..municipio..ies.        municipio.de.domicilio.de.la.ies 
+                              "integer"                             "character" 
+                                    ano                                semestre 
+                              "integer"                               "integer" 
+                               auxiliar                      servicios.tecnicos 
+                              "numeric"                               "numeric" 
+                            profesional                               directivo 
+                              "numeric"                               "integer" 
+                                  total 
+                              "numeric" </code></pre>
+</div>
+</div>
+</section>
+<section id="resumen-estadistico-de-los-datos" class="level3">
+<h3 class="anchored" data-anchor-id="resumen-estadistico-de-los-datos">Resumen estadistico de los datos</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#obtenemos un resumen estadisticco de los datos</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(datos_adminstrativos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> codigo.de..la.institucion   ies.padre   
+ Min.   :1101              Min.   :1101  
+ 1st Qu.:1807              1st Qu.:1806  
+ Median :2722              Median :2719  
+ Mean   :3089              Mean   :3030  
+ 3rd Qu.:3107              3rd Qu.:3104  
+ Max.   :9936              Max.   :9936  
+ institucion.de.educacion.superior..ies. principal..o.seccional id.sector.ies  
+ Length:5769                             Length:5769            Min.   :1.000  
+ Class :character                        Class :character       1st Qu.:1.000  
+ Mode  :character                        Mode  :character       Median :2.000  
+                                                                Mean   :1.706  
+                                                                3rd Qu.:2.000  
+                                                                Max.   :2.000  
+  sector.ies        id.caracter.ies caracter.ies      
+ Length:5769        Min.   :1.00    Length:5769       
+ Class :character   1st Qu.:3.00    Class :character  
+ Mode  :character   Median :3.00    Mode  :character  
+                    Mean   :3.28                      
+                    3rd Qu.:4.00                      
+                    Max.   :4.00                      
+ codigo.del..departamento..ies. departamento.de..domicilio.de.la.ies
+ Min.   : 5.00                  Length:5769                         
+ 1st Qu.:11.00                  Class :character                    
+ Median :11.00                  Mode  :character                    
+ Mean   :26.81                                                      
+ 3rd Qu.:52.00                                                      
+ Max.   :91.00                                                      
+ codigo.del..municipio..ies. municipio.de.domicilio.de.la.ies      ano      
+ Min.   : 5001               Length:5769                      Min.   :2014  
+ 1st Qu.:11001               Class :character                 1st Qu.:2017  
+ Median :11001               Mode  :character                 Median :2018  
+ Mean   :26871                                                Mean   :2018  
+ 3rd Qu.:52001                                                3rd Qu.:2019  
+ Max.   :91001                                                Max.   :2021  
+    semestre        auxiliar       servicios.tecnicos  profesional     
+ Min.   :1.000   Min.   :   0.00   Min.   :   0.00    Min.   :   0.00  
+ 1st Qu.:1.000   1st Qu.:   1.00   1st Qu.:   0.00    1st Qu.:   1.00  
+ Median :1.000   Median :  10.00   Median :   4.00    Median :  12.00  
+ Mean   :1.492   Mean   :  54.62   Mean   :  32.39    Mean   :  62.53  
+ 3rd Qu.:2.000   3rd Qu.:  58.00   3rd Qu.:  28.00    3rd Qu.:  58.00  
+ Max.   :2.000   Max.   :1011.00   Max.   :1621.00    Max.   :3282.00  
+   directivo           total       
+ Min.   :   0.00   Min.   :   0.0  
+ 1st Qu.:   1.00   1st Qu.:   5.0  
+ Median :   4.00   Median :  41.0  
+ Mean   :  17.05   Mean   : 161.9  
+ 3rd Qu.:  19.00   3rd Qu.: 190.0  
+ Max.   :1340.00   Max.   :4305.0  </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="graficos-de-dispersion" class="level1">
+<h1>Graficos de dispersion</h1>
+<section id="veremos-los-datos-numericos-con-graficas-de-dispersion-para-ver-la-relacion-q-tienen-las-variables-1" class="level2">
+<h2 class="anchored" data-anchor-id="veremos-los-datos-numericos-con-graficas-de-dispersion-para-ver-la-relacion-q-tienen-las-variables-1">Veremos los datos numericos con graficas de <strong>dispersion</strong> para ver la relacion q tienen las variables</h2>
+<p>En este analisis nos enfocaremos en la relacion que tienen las variables en base a su direccion, fuerza, su forma del patron, outliers.</p>
+<section id="columna-auxuliar-y-servicios-tecnicos" class="level3">
+<h3 class="anchored" data-anchor-id="columna-auxuliar-y-servicios-tecnicos">columna auxuliar y servicios tecnicos</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> auxiliar, <span class="at">y =</span> servicios.tecnicos)) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En esta grafica vemos que tiene una relacionn positiva pero no es una linea diagonal marcada sino mas orientada a ser horizontal, en relacion a la fuerza vemos que la concentracion de los puntos no es un a linea recta por lo cual tiene una relacion mas debil, en cuanto a los valores outliers observamos varios que estan lejos de la concentracion d elos datos lo cual se debe una exploracion mas completa</p>
+</section>
+<section id="columna-auxiliar-y-profesional" class="level3">
+<h3 class="anchored" data-anchor-id="columna-auxiliar-y-profesional">columna auxiliar y profesional</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> auxiliar, <span class="at">y =</span> profesional)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este caso vemos que en proporcio al numero de datos tenemos una linea diagonal positiva y que la fuerza esta concentrada en dicha linea lo cual nos confirmaria de una relacion lineal entre las variables con outliers bastante alejados de profesionales</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> auxiliar, <span class="at">y =</span> directivo)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vemos en la grafico que no hay relacion positiva creciente o diagonal tenemos algunos valores outliers de directivos pero estas 2 variables no tiene buena relacion</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> auxiliar, <span class="at">y =</span> total)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este caso podemos ver que la relacion entre estas 2 variables es perfecta, tiene una una linea diagonal con relaccioin positiva y con los puntos perfectamente conecntrados en la linea co algunos valores outliers</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> total, <span class="at">y =</span> profesional)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este caso tambien tenemos buena relacion entre las variables</p>
+</section>
+</section>
+</section>
+<section id="graficos-de-histograma" class="level1">
+<h1>Graficos de Histograma</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> id.caracter.ies)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este histograma vemos que el caracter de la institucion que mas frecuente es el id 3</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> codigo.del..departamento..ies.)) <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.3.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar el recuento y almacenar el resultado en una variable</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>resultado <span class="ot">&lt;-</span> datos_adminstrativos <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(codigo.del..departamento..ies., departamento.de..domicilio.de.la.ies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resultado)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 61%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">codigo.del..departamento..ies.</th>
+<th style="text-align: left;">departamento.de..domicilio.de.la.ies</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">antioquia</td>
+<td style="text-align: right;">864</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">atlantico</td>
+<td style="text-align: right;">385</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">bogota d.c</td>
+<td style="text-align: right;">730</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">bogota d.c.</td>
+<td style="text-align: right;">1576</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">bolivar</td>
+<td style="text-align: right;">154</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">boyaca</td>
+<td style="text-align: right;">85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: left;">caldas</td>
+<td style="text-align: right;">78</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">caqueta</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">cauca</td>
+<td style="text-align: right;">65</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">cesar</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23</td>
+<td style="text-align: left;">cordoba</td>
+<td style="text-align: right;">34</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">cundinamarca</td>
+<td style="text-align: right;">141</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">27</td>
+<td style="text-align: left;">choco</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41</td>
+<td style="text-align: left;">huila</td>
+<td style="text-align: right;">49</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">44</td>
+<td style="text-align: left;">guajira</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">44</td>
+<td style="text-align: left;">la guajira</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">47</td>
+<td style="text-align: left;">magdalena</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">50</td>
+<td style="text-align: left;">meta</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">52</td>
+<td style="text-align: left;">naria’o</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">52</td>
+<td style="text-align: left;">narinio</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">52</td>
+<td style="text-align: left;">narino</td>
+<td style="text-align: right;">54</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">54</td>
+<td style="text-align: left;">norte de santander</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">63</td>
+<td style="text-align: left;">quindio</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">66</td>
+<td style="text-align: left;">risaralda</td>
+<td style="text-align: right;">84</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">santander</td>
+<td style="text-align: right;">326</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">70</td>
+<td style="text-align: left;">sucre</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">73</td>
+<td style="text-align: left;">tolima</td>
+<td style="text-align: right;">71</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">76</td>
+<td style="text-align: left;">valle del cauca</td>
+<td style="text-align: right;">592</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">81</td>
+<td style="text-align: left;">arauca</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">85</td>
+<td style="text-align: left;">casanare</td>
+<td style="text-align: right;">87</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">86</td>
+<td style="text-align: left;">putumayo</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">archipielago de san andres, providencia y santa catalina</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">88</td>
+<td style="text-align: left;">san andres y providencia</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">amazonas</td>
+<td style="text-align: right;">11</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizando el operador :: para asegurar que estamos usando la versión correcta de count</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>datos_adminstrativos <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(codigo.del..departamento..ies., departamento.de..domicilio.de.la.ies) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">View</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> ano)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este caso vamos en la grafiac que el anio co mayot frecuencia de datos es el 2019</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> auxiliar)) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> servicios.tecnicos)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En esta grafica no podemos visualizar bien los datos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> directivo)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Lo mismo que la anterior grafica debemos buscar la forma de poder visualizar los datos de otra forma</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> profesional)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Lo mismo que el anterior</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> total)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="grafico-de-barras" class="level1">
+<h1>Grafico de barras</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> ano)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este caso podemos observar que los datos mas marcados/columna mas frecuente es la del 2019</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> institucion.de.educacion.superior..ies.)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar el recuento y almacenar el resultado en una variable</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>resultad <span class="ot">&lt;-</span> datos_adminstrativos <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(codigo.de..la.institucion, institucion.de.educacion.superior..ies.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(resultad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 75%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">codigo.de..la.institucion</th>
+<th style="text-align: left;">institucion.de.educacion.superior..ies.</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1101</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1102</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1103</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1104</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1105</td>
+<td style="text-align: left;">universidad pedagogica nacional</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1106</td>
+<td style="text-align: left;">universidad pedagogica y tecnologica de colombia - uptc</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1107</td>
+<td style="text-align: left;">universidad pedagogica y tecnologica de colombia - uptc</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1108</td>
+<td style="text-align: left;">universidad pedagogica y tecnologica de colombia - uptc</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1109</td>
+<td style="text-align: left;">universidad pedagogica y tecnologica de colombia - uptc</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1110</td>
+<td style="text-align: left;">universidad del cauca</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1111</td>
+<td style="text-align: left;">universidad tecnologica de pereira - utp</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1112</td>
+<td style="text-align: left;">universidad de caldas</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1113</td>
+<td style="text-align: left;">universidad de cordoba</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1114</td>
+<td style="text-align: left;">universidad surcolombiana</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1115</td>
+<td style="text-align: left;">universidad de la amazonia</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1117</td>
+<td style="text-align: left;">universidad militar-nueva granada</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1118</td>
+<td style="text-align: left;">universidad tecnologica del choco-diego luis cordoba</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1119</td>
+<td style="text-align: left;">universidad de los llanos</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1120</td>
+<td style="text-align: left;">universidad popular del cesar</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1121</td>
+<td style="text-align: left;">universidad-colegio mayor de cundinamarca</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1122</td>
+<td style="text-align: left;">universidad del pacifico</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1123</td>
+<td style="text-align: left;">universidad popular del cesar</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1124</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1125</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1126</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1201</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1202</td>
+<td style="text-align: left;">universidad del atlantico</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1203</td>
+<td style="text-align: left;">universidad del valle</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1204</td>
+<td style="text-align: left;">universidad industrial de santander</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1205</td>
+<td style="text-align: left;">universidad de cartagena</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1206</td>
+<td style="text-align: left;">universidad de nari?o</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1206</td>
+<td style="text-align: left;">universidad de naria’o</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1206</td>
+<td style="text-align: left;">universidad de narino</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1207</td>
+<td style="text-align: left;">universidad del tolima</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1208</td>
+<td style="text-align: left;">universidad del quindio</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1209</td>
+<td style="text-align: left;">universidad francisco de paula santander</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1210</td>
+<td style="text-align: left;">universidad francisco de paula santander</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1212</td>
+<td style="text-align: left;">universidad de pamplona</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1213</td>
+<td style="text-align: left;">universidad del magdalena - unimagdalena</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1214</td>
+<td style="text-align: left;">universidad de cundinamarca-udec</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1215</td>
+<td style="text-align: left;">universidad de cundinamarca-udec</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1216</td>
+<td style="text-align: left;">universidad de cundinamarca-udec</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1217</td>
+<td style="text-align: left;">universidad de sucre</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1218</td>
+<td style="text-align: left;">universidad de la guajira</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1219</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1220</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1221</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1222</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1223</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1301</td>
+<td style="text-align: left;">universidad distrital-francisco jose de caldas</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1701</td>
+<td style="text-align: left;">pontificia universidad javeriana</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1702</td>
+<td style="text-align: left;">pontificia universidad javeriana</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1703</td>
+<td style="text-align: left;">universidad incca de colombia</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1704</td>
+<td style="text-align: left;">universidad santo tomas</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1705</td>
+<td style="text-align: left;">universidad santo tomas</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1706</td>
+<td style="text-align: left;">universidad externado de colombia</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1707</td>
+<td style="text-align: left;">fundacion universidad de bogota - jorge tadeo lozano</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1708</td>
+<td style="text-align: left;">fundacion universidad de bogota - jorge tadeo lozano</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1709</td>
+<td style="text-align: left;">universidad central</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1710</td>
+<td style="text-align: left;">universidad pontificia bolivariana</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1711</td>
+<td style="text-align: left;">universidad de la sabana</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1712</td>
+<td style="text-align: left;">universidad eafit-</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1713</td>
+<td style="text-align: left;">universidad del norte</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1714</td>
+<td style="text-align: left;">colegio mayor de nuestra sea’ora del rosario</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1714</td>
+<td style="text-align: left;">colegio mayor de nuestra senora del rosario</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1715</td>
+<td style="text-align: left;">fundacion universidad de america</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1716</td>
+<td style="text-align: left;">universidad de san buenaventura</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1717</td>
+<td style="text-align: left;">universidad de san buenaventura</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1718</td>
+<td style="text-align: left;">universidad de san buenaventura</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1719</td>
+<td style="text-align: left;">universidad catolica de colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1720</td>
+<td style="text-align: left;">universidad mariana</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1722</td>
+<td style="text-align: left;">universidad de manizales</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1723</td>
+<td style="text-align: left;">universidad pontificia bolivariana</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1724</td>
+<td style="text-align: left;">universidad de san buenaventura</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1725</td>
+<td style="text-align: left;">fundacion universidad autonoma de colombia -fuac-</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1726</td>
+<td style="text-align: left;">universidad catolica de oriente</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1726</td>
+<td style="text-align: left;">universidad catolica de oriente -uco</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1727</td>
+<td style="text-align: left;">universidad pontificia bolivariana</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1728</td>
+<td style="text-align: left;">universidad sergio arboleda</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1729</td>
+<td style="text-align: left;">universidad el bosque</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1730</td>
+<td style="text-align: left;">universidad pontificia bolivariana</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1731</td>
+<td style="text-align: left;">universidad catolica de colombia</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1732</td>
+<td style="text-align: left;">universidad santo tomas</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1733</td>
+<td style="text-align: left;">universidad sergio arboleda</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1734</td>
+<td style="text-align: left;">universidad de boyaca uniboyaca</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1735</td>
+<td style="text-align: left;">universidad manuela beltran-umb-</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1801</td>
+<td style="text-align: left;">universidad la gran colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1802</td>
+<td style="text-align: left;">universidad la gran colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1803</td>
+<td style="text-align: left;">universidad de la salle</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1804</td>
+<td style="text-align: left;">universidad autonoma del caribe</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1804</td>
+<td style="text-align: left;">universidad autonoma del caribe- uniautonoma</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1805</td>
+<td style="text-align: left;">universidad santiago de cali</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1806</td>
+<td style="text-align: left;">universidad libre</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1807</td>
+<td style="text-align: left;">universidad libre</td>
+<td style="text-align: right;">115</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1808</td>
+<td style="text-align: left;">universidad libre</td>
+<td style="text-align: right;">100</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1809</td>
+<td style="text-align: left;">universidad libre</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1810</td>
+<td style="text-align: left;">universidad libre</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1811</td>
+<td style="text-align: left;">universidad libre</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1812</td>
+<td style="text-align: left;">universidad de medellin</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1813</td>
+<td style="text-align: left;">universidad de los andes</td>
+<td style="text-align: right;">73</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1814</td>
+<td style="text-align: left;">universidad autonoma latinoamericana-unaula-</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1815</td>
+<td style="text-align: left;">corporacion universidad piloto de colombia</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1816</td>
+<td style="text-align: left;">universidad cooperativa de colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1817</td>
+<td style="text-align: left;">universidad cooperativa de colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1818</td>
+<td style="text-align: left;">universidad cooperativa de colombia</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1819</td>
+<td style="text-align: left;">universidad cooperativa de colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1820</td>
+<td style="text-align: left;">universidad cooperativa de colombia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1822</td>
+<td style="text-align: left;">corporacion universidad piloto de colombia</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1823</td>
+<td style="text-align: left;">universidad autonoma de bucaramanga-unab-</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1824</td>
+<td style="text-align: left;">universidad metropolitana</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1825</td>
+<td style="text-align: left;">universidad autonoma de manizales</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1826</td>
+<td style="text-align: left;">universidad antonio narino</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1827</td>
+<td style="text-align: left;">universidad catolica de manizales</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1828</td>
+<td style="text-align: left;">universidad icesi</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1829</td>
+<td style="text-align: left;">universidad santiago de cali</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1830</td>
+<td style="text-align: left;">universidad autonoma de occidente</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1831</td>
+<td style="text-align: left;">universidad de ibague</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1832</td>
+<td style="text-align: left;">universidad tecnologica de bolivar</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1833</td>
+<td style="text-align: left;">universidad del sinu - elias bechara zainum - unisinu -</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1834</td>
+<td style="text-align: left;">universidad del sinu - elias bechara zainum - unisinu -</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1835</td>
+<td style="text-align: left;">universidad de ciencias aplicadas y ambientales - udca</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1835</td>
+<td style="text-align: left;">universidad de ciencias aplicadas y ambientales udca.</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2102</td>
+<td style="text-align: left;">universidad nacional abierta y a distancia unad</td>
+<td style="text-align: right;">172</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2104</td>
+<td style="text-align: left;">escuela superior de administracion publica-esap-</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2106</td>
+<td style="text-align: left;">direccion nacional de escuelas</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2110</td>
+<td style="text-align: left;">colegio mayor de antioquia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2111</td>
+<td style="text-align: left;">escuela superior de administracion publica-esap-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2114</td>
+<td style="text-align: left;">escuela nacional del deporte</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2206</td>
+<td style="text-align: left;">instituto departamental de bellas artes</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2207</td>
+<td style="text-align: left;">instituto universitario de la paz</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2208</td>
+<td style="text-align: left;">conservatorio del tolima</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2209</td>
+<td style="text-align: left;">politecnico colombiano jaime isaza cadavid</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2211</td>
+<td style="text-align: left;">institucion universitaria bellas artes y ciencias de bolivar</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2301</td>
+<td style="text-align: left;">unidad central del valle del cauca</td>
+<td style="text-align: right;">116</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2302</td>
+<td style="text-align: left;">institucion universitaria de envigado</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2701</td>
+<td style="text-align: left;">institucion universitaria colegios de colombia - unicoc</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2702</td>
+<td style="text-align: left;">fundacion universitaria de ciencias de la salud</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2704</td>
+<td style="text-align: left;">colegio de estudios superiores de administracion-cesa-</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2707</td>
+<td style="text-align: left;">fundaci?n universitaria juan n.&nbsp;corpas</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2707</td>
+<td style="text-align: left;">fundacion universitaria juan n.&nbsp;corpas</td>
+<td style="text-align: right;">63</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2708</td>
+<td style="text-align: left;">universidad ces</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2709</td>
+<td style="text-align: left;">fundacion universitaria san martin</td>
+<td style="text-align: right;">94</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2710</td>
+<td style="text-align: left;">fundacion universitaria monserrate</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2710</td>
+<td style="text-align: left;">fundacion universitaria monserrate -unimonserrate</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2711</td>
+<td style="text-align: left;">universidad catolica de pereira</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2712</td>
+<td style="text-align: left;">fundacion universitaria konrad lorenz</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2713</td>
+<td style="text-align: left;">fundacion universitaria los libertadores</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2715</td>
+<td style="text-align: left;">fundacion universitaria de popayan</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2717</td>
+<td style="text-align: left;">fundacion universitaria de garcia rovira,norte y gutierrez</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2719</td>
+<td style="text-align: left;">fundacion universitaria luis amigo funlam</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2719</td>
+<td style="text-align: left;">universidad cat?lica luis amig?</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2719</td>
+<td style="text-align: left;">universidad cata”lica luis amiga”-funlam</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2719</td>
+<td style="text-align: left;">universidad catolica luis amigo</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2719</td>
+<td style="text-align: left;">universidad catolica luis amigo-funlam</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2720</td>
+<td style="text-align: left;">fundacion universitaria juan de castellanos</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2721</td>
+<td style="text-align: left;">fundacion universitaria maria cano</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2722</td>
+<td style="text-align: left;">fundacion centro universitario de bienestar rural</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2723</td>
+<td style="text-align: left;">fundacion universitaria agraria de colombia -uniagraria-</td>
+<td style="text-align: right;">254</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2724</td>
+<td style="text-align: left;">fundacion universitaria de san gil - unisangil -</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2725</td>
+<td style="text-align: left;">politecnico grancolombiano</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2726</td>
+<td style="text-align: left;">fundacion universitaria manuela beltran-umb</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2727</td>
+<td style="text-align: left;">fundacion universitaria-ceipa-</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2728</td>
+<td style="text-align: left;">fundacion universitaria del area andina</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2729</td>
+<td style="text-align: left;">fundacion universitaria de boyaca</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2730</td>
+<td style="text-align: left;">fundacion escuela colombiana de rehabilitacion</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2731</td>
+<td style="text-align: left;">fundacion universitaria catolica lumen gentium</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2731</td>
+<td style="text-align: left;">fundacion universitaria catolica lumen gentium - unicat?lica - cali</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2731</td>
+<td style="text-align: left;">fundacion universitaria catolica lumen gentium - unicatolica - cali</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2732</td>
+<td style="text-align: left;">fundacion universitaria catolica del norte</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2733</td>
+<td style="text-align: left;">fundacia”n universitaria san alfonso- fusa-</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2733</td>
+<td style="text-align: left;">fundacion universitaria san alfonso- fusa-</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2736</td>
+<td style="text-align: left;">fundacion universitaria seminario biblico de colombia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2736</td>
+<td style="text-align: left;">fundacion universitaria seminario biblico de colombia - fusbc</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2737</td>
+<td style="text-align: left;">fundacion universitaria del area andina</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2738</td>
+<td style="text-align: left;">fundacion universitaria empresarial de la camara de comercio de bogota</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2738</td>
+<td style="text-align: left;">fundacion universitaria empresarial de la camara de comercio de bogota- uniempresarial</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2738</td>
+<td style="text-align: left;">fundacion univesitaria empresarial de la camara de comercio de bogota</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2739</td>
+<td style="text-align: left;">fundacion de estudios superiores universitarios de uraba antonio roldan betancur</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2740</td>
+<td style="text-align: left;">institucion universitaria colombo americana - unica</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2741</td>
+<td style="text-align: left;">fundacion de estudios superiores - monsea’or abraham escudero montoya - fundes</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2741</td>
+<td style="text-align: left;">fundacion de estudios superiores - monsenor abraham escudero montoya - fundes</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2743</td>
+<td style="text-align: left;">fundacion universitaria internacional del tropico americano</td>
+<td style="text-align: right;">85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2743</td>
+<td style="text-align: left;">universidad internacional del tropico americano</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2744</td>
+<td style="text-align: left;">institucion universitaria centro de estudios superiores maria goretti</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2744</td>
+<td style="text-align: left;">universidad cesmag - unicesmag</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2745</td>
+<td style="text-align: left;">unipanamericana - fundacion universitaria panamericana</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2746</td>
+<td style="text-align: left;">fundacion universitaria sanitas</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2747</td>
+<td style="text-align: left;">fundacion universitaria autonoma de las americas</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2747</td>
+<td style="text-align: left;">institucion universitaria vision de las americas</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2748</td>
+<td style="text-align: left;">fundacion universitaria seminario teologico bautista internacional</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2749</td>
+<td style="text-align: left;">institucion universitaria salazar y herrera</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2801</td>
+<td style="text-align: left;">corporacion universitaria autonoma de occidente</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2805</td>
+<td style="text-align: left;">universidad simon bolivar</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2806</td>
+<td style="text-align: left;">corporacion universitaria del sinu-cus</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2809</td>
+<td style="text-align: left;">corporacion universitaria tecnologica de bolivar</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2810</td>
+<td style="text-align: left;">corporacion universidad de la costa cuc</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2811</td>
+<td style="text-align: left;">escuela colombiana de ingenieria julio garavito</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2811</td>
+<td style="text-align: left;">universidad escuela colombiana de ingenieria julio garavito</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2812</td>
+<td style="text-align: left;">universidad ean</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2813</td>
+<td style="text-align: left;">escuela de ingenieria de antioquia</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2813</td>
+<td style="text-align: left;">universidad eia</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2815</td>
+<td style="text-align: left;">corporacion universitaria adventista - unac</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2817</td>
+<td style="text-align: left;">corporacion universitaria de ibague-coruniversitaria</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2818</td>
+<td style="text-align: left;">corporacion universitaria de santa rosa de cabal-unisarc-</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2819</td>
+<td style="text-align: left;">corporacion universitaria de ciencias aplicadas y ambientales udca</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2820</td>
+<td style="text-align: left;">corporacion universitaria lasallista</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2822</td>
+<td style="text-align: left;">escuela superior de oftalmologia, instituto barraquer de america</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2823</td>
+<td style="text-align: left;">corporacion universitaria del caribe - cecar</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2824</td>
+<td style="text-align: left;">corporacion universitaria de colombia ideas</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2825</td>
+<td style="text-align: left;">corporacion universitaria rafael nunez</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2827</td>
+<td style="text-align: left;">corporacion universitaria del meta</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2827</td>
+<td style="text-align: left;">corporacion universitaria del meta - unimeta</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2828</td>
+<td style="text-align: left;">corporacion universitaria del huila-corhuila-</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2829</td>
+<td style="text-align: left;">corporacion universitaria minuto de dios -uniminuto-</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2830</td>
+<td style="text-align: left;">corporacion universitaria iberoamericana</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2831</td>
+<td style="text-align: left;">corporacion universitaria de ciencia y desarrollo - uniciencia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2832</td>
+<td style="text-align: left;">universidad de santander - udes</td>
+<td style="text-align: right;">120</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2833</td>
+<td style="text-align: left;">corporacion universitaria remington</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2834</td>
+<td style="text-align: left;">universitaria agustiniana- uniagustiniana</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2835</td>
+<td style="text-align: left;">corporacion cristiana universitaria de san andres, providencia y santa catalina</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2836</td>
+<td style="text-align: left;">corporacion universitaria empresarial de salamanca</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2837</td>
+<td style="text-align: left;">corporacion universitaria republicana</td>
+<td style="text-align: right;">62</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2838</td>
+<td style="text-align: left;">corporacion colegiatura colombiana</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2839</td>
+<td style="text-align: left;">corporacion universitaria del sinu-cus</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2840</td>
+<td style="text-align: left;">corporacion universitaria empresarial alexander von humboldt - cue</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2841</td>
+<td style="text-align: left;">corporacion universitaria minuto de dios -uniminuto-</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2842</td>
+<td style="text-align: left;">corporacion universitaria reformada - cur -</td>
+<td style="text-align: right;">130</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2847</td>
+<td style="text-align: left;">corporacion universidad de investigacion y desarrollo - udi</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2847</td>
+<td style="text-align: left;">corporacion universitaria de investigacion y desarrollo - udi</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2847</td>
+<td style="text-align: left;">universidad de investigacion y desarrollo - udi</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2848</td>
+<td style="text-align: left;">corporacion universitaria unitec</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2849</td>
+<td style="text-align: left;">corporacion universitaria autonoma del cauca</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2850</td>
+<td style="text-align: left;">corporacion universitaria antonio jose de sucre - corposucre</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2901</td>
+<td style="text-align: left;">escuela de inteligencia y contrainteligencia brigadier general ricardo charry solano</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2902</td>
+<td style="text-align: left;">escuela de logistica</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2903</td>
+<td style="text-align: left;">escuela de comunicaciones</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2904</td>
+<td style="text-align: left;">escuela superior de guerra</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2904</td>
+<td style="text-align: left;">escuela superior de guerra general rafael reyes prieto</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2905</td>
+<td style="text-align: left;">centro de educacion militar - cemil</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2906</td>
+<td style="text-align: left;">escuela de postgrados de la fuerza aerea colombiana capitan jose edmundo sandoval - epfac</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3102</td>
+<td style="text-align: left;">instituto superior de educacion rural-iser-</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3103</td>
+<td style="text-align: left;">colegio mayor de bolivar</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3103</td>
+<td style="text-align: left;">institucion universitaria mayor de cartagena</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3104</td>
+<td style="text-align: left;">colegio mayor del cauca</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3107</td>
+<td style="text-align: left;">institucia”n universitaria pascual bravo</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3107</td>
+<td style="text-align: left;">institucion universitaria pascual bravo</td>
+<td style="text-align: right;">85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3114</td>
+<td style="text-align: left;">escuela naval de suboficiales arc barranquilla</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3115</td>
+<td style="text-align: left;">instituto tecnologico del putumayo</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3116</td>
+<td style="text-align: left;">instituto tecnologico del putumayo</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3117</td>
+<td style="text-align: left;">institucion universitaria itsa</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3117</td>
+<td style="text-align: left;">instituto tecnologico de soledad atlantico</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3201</td>
+<td style="text-align: left;">unidades tecnologicas de santander</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3204</td>
+<td style="text-align: left;">tecnologico de antioquia</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3301</td>
+<td style="text-align: left;">institucion universitaria antonio jose camacho</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3302</td>
+<td style="text-align: left;">instituto tecnologico metropolitano</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3303</td>
+<td style="text-align: left;">escuela superior tecnologica de artes debora arango</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3702</td>
+<td style="text-align: left;">fundacion tecnologica autonoma de bogota-faba-</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3703</td>
+<td style="text-align: left;">fundacion escuela colombiana de mercadotecnia -escolme-</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3703</td>
+<td style="text-align: left;">institucion universitaria escolme</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3705</td>
+<td style="text-align: left;">fundacion universitaria tecnologico comfenalco - cartagena</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3706</td>
+<td style="text-align: left;">fundacion centro colombiano de estudios profesionales, -f.c.e.c.e.p.</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3710</td>
+<td style="text-align: left;">fundacion tecnologica antonio de arevalo</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3710</td>
+<td style="text-align: left;">fundacion universitaria antonio de arevalo - unitecnar</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3712</td>
+<td style="text-align: left;">fundacion centro de investigacion docencia y consultoria administrativa-f-cidca-</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3713</td>
+<td style="text-align: left;">fundacion universitaria para el desarrollo humano - uninpahu</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3715</td>
+<td style="text-align: left;">fundacion tecnologica autonoma del pacifico</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3716</td>
+<td style="text-align: left;">tecnologica fitec</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3718</td>
+<td style="text-align: left;">fundacion de estudios superiores comfanorte -f.e.s.c.-</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3719</td>
+<td style="text-align: left;">institucion universitaria latina - unilatina</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3720</td>
+<td style="text-align: left;">fundacion universitaria esumer</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3723</td>
+<td style="text-align: left;">fundacion eurocolombiana de educacion superior - eurocol</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3724</td>
+<td style="text-align: left;">fundacion tecnologica de madrid</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3725</td>
+<td style="text-align: left;">fundacion tecnologica alberto merani</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3725</td>
+<td style="text-align: left;">fundacion tecnologica san francisco de asis</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3801</td>
+<td style="text-align: left;">corporacion de estudios tecnologicos del norte del valle</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3802</td>
+<td style="text-align: left;">centro educacional de computos y sistemas-cedesistemas-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3803</td>
+<td style="text-align: left;">corporacion universitaria centro superior - unicuces</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3805</td>
+<td style="text-align: left;">instituto de educacion empresarial-idee-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3806</td>
+<td style="text-align: left;">corporacion escuela superior de administracion y estudios tecnologicos- eae</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3807</td>
+<td style="text-align: left;">escuela de tecnologias de antioquia -eta-</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3808</td>
+<td style="text-align: left;">corporacion tecnologica de bogota - ctb</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3809</td>
+<td style="text-align: left;">instituto superior de ciencias sociales y economico familiares-icsef-</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3810</td>
+<td style="text-align: left;">corporacion educativa -itae-</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3811</td>
+<td style="text-align: left;">corporacion de educacion del norte del tolima - coreducacion</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3812</td>
+<td style="text-align: left;">corporacion politecnico marco fidel suarez</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3812</td>
+<td style="text-align: left;">institucion universitaria marco fidel suarez - iumafis</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3817</td>
+<td style="text-align: left;">corporacion universitaria autonoma de naria’o -aunar-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3817</td>
+<td style="text-align: left;">corporacion universitaria autonoma de narino -aunar-</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3819</td>
+<td style="text-align: left;">corporacion tecnologica industrial colombiana - teinco</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3820</td>
+<td style="text-align: left;">corporacion academia tecnologica de colombia -atec-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3821</td>
+<td style="text-align: left;">corporacion politecnico de la costa atlantica</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3822</td>
+<td style="text-align: left;">corporacion colombo - alemana para la formacion tecnologica-icaft-</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3822</td>
+<td style="text-align: left;">politecnico icaft</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3823</td>
+<td style="text-align: left;">union americana de educacion superior- union americana</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3824</td>
+<td style="text-align: left;">escuela superior de ciencias empresariales - eciem</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3826</td>
+<td style="text-align: left;">corporacion internacional para el desarrollo educativo -cide-</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3827</td>
+<td style="text-align: left;">politecnico santafe de bogota</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3828</td>
+<td style="text-align: left;">tecnologica del sur</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3829</td>
+<td style="text-align: left;">corporacion jhon f.&nbsp;kennedy</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3830</td>
+<td style="text-align: left;">corporacion universal de investigacion y tecnologia -coruniversitec-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3831</td>
+<td style="text-align: left;">corporacion universitaria comfacauca - unicomfacauca</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3831</td>
+<td style="text-align: left;">institucion universitaria tecnologica de comfacauca i.t.c.</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3832</td>
+<td style="text-align: left;">corporacion tecnologica superior siglo xxi</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3833</td>
+<td style="text-align: left;">corporacion tecnologico copacabana - teco -</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3834</td>
+<td style="text-align: left;">corporacion tecnologica catolica de occidente - tecoc -</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3901</td>
+<td style="text-align: left;">escuela de formacion de infanteria de marina</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3902</td>
+<td style="text-align: left;">escuela militar de suboficiales sargento inocencio chinca</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4101</td>
+<td style="text-align: left;">instituto de educacion tecnica profesional de roldanillo</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4102</td>
+<td style="text-align: left;">instituto nacional de formacion tecnica profesional de san juan del cesar</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4106</td>
+<td style="text-align: left;">instituto nacional de formacion tecnica profesional de san andres</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4107</td>
+<td style="text-align: left;">instituto tecnico agricola ita</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4108</td>
+<td style="text-align: left;">escuela tecnologica instituto tecnico central</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4109</td>
+<td style="text-align: left;">instituto tecnico nacional de comercio simon rodriguez - intenalco</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4110</td>
+<td style="text-align: left;">instituto tolimense de formacion tecnica profesional</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4111</td>
+<td style="text-align: left;">instituto nacional de formacion tecnica profesional - humberto velasquez garcia</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4112</td>
+<td style="text-align: left;">colegio integrado nacional oriente de caldas - ies cinoc</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4701</td>
+<td style="text-align: left;">fundacion academia de dibujo profesional</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4702</td>
+<td style="text-align: left;">fundacion de educacion superior san jose -fessanjose-</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4704</td>
+<td style="text-align: left;">fundacion para la educacion superior real de colombia</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4705</td>
+<td style="text-align: left;">fundacion centro de educacion superior,investigacion y profesionalizacion -cedinpro-</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4708</td>
+<td style="text-align: left;">fundacion escuela colombiana de hoteleria y turismo-ecotet-</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4709</td>
+<td style="text-align: left;">escuela de administracion y mercadotecnia del quindio e.a.m.</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4709</td>
+<td style="text-align: left;">institucion universitaria eam</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4710</td>
+<td style="text-align: left;">fundacion politecnico minuto de dios - tec md</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4710</td>
+<td style="text-align: left;">politecnico indoamericano</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4711</td>
+<td style="text-align: left;">fundacion de educacion superior esatec</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4714</td>
+<td style="text-align: left;">fundacion interamericana tecnica-fit-</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4716</td>
+<td style="text-align: left;">fundacion instituto de carreras tecnicas profesionales-fidci-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4719</td>
+<td style="text-align: left;">fundacion de educacion superior nueva america</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4721</td>
+<td style="text-align: left;">fundacion universitaria horizonte</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4726</td>
+<td style="text-align: left;">fundacion para la educacion superior san mateo</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4727</td>
+<td style="text-align: left;">politecnico internacional institucion de educacion superior</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4801</td>
+<td style="text-align: left;">corporacion academia superior de artes</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4803</td>
+<td style="text-align: left;">corporacion politecnico colombo andino</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4804</td>
+<td style="text-align: left;">corporacion educativa del oriente</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4805</td>
+<td style="text-align: left;">corporacion tecnica de colombia -corpotec-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4806</td>
+<td style="text-align: left;">corporacion centro de estudios artisticos y tecnicos-ceart-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4808</td>
+<td style="text-align: left;">corporacion regional de educacion superior-cres-de cali</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4809</td>
+<td style="text-align: left;">corporacion centro tecnico arquitectonico</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4810</td>
+<td style="text-align: left;">corporacion universitaria cenda</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4811</td>
+<td style="text-align: left;">corporacion de estudios superiores salamandra</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4812</td>
+<td style="text-align: left;">corporacion centro de nuestra senora de las mercedes</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4813</td>
+<td style="text-align: left;">corporacion unificada nacional de educacion superior-cun-</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4817</td>
+<td style="text-align: left;">corporacion educativa del litoral</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4818</td>
+<td style="text-align: left;">corporacion universitaria latinoamericana - cul</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4822</td>
+<td style="text-align: left;">corporacion escuela de artes y letras</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4825</td>
+<td style="text-align: left;">corporacion instituto de administracion y finanzas - ciaf</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4826</td>
+<td style="text-align: left;">corporacion universitaria regional del caribe -iafic-</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4827</td>
+<td style="text-align: left;">corporacion educativa instituto tecnico superior de artes, ideartes</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4829</td>
+<td style="text-align: left;">corporacion interamericana de educacion superior-corpocides</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4832</td>
+<td style="text-align: left;">corporacion instituto superior de educacion social-ises-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4835</td>
+<td style="text-align: left;">corporacion educativa taller 5 centro de diseno</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4835</td>
+<td style="text-align: left;">corporacion universitaria taller cinco</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4835</td>
+<td style="text-align: left;">corporacion universitaria taller cinco centro de dise?o</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4835</td>
+<td style="text-align: left;">corporacion universitaria taller cinco centro de diseno</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4837</td>
+<td style="text-align: left;">corporacion universitaria de ciencias empresariales, educacion y salud -corsalud-</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4837</td>
+<td style="text-align: left;">corporacion universitaria de ciencias empresariales, educacion y salud -unicorsalud-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4838</td>
+<td style="text-align: left;">corporacion bolivariana de educacion superior - corbes -</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5801</td>
+<td style="text-align: left;">corporacion escuela tecnologica del oriente</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5802</td>
+<td style="text-align: left;">escuela colombiana de carreras industriales</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5802</td>
+<td style="text-align: left;">universidad ecci</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9101</td>
+<td style="text-align: left;">escuela de investigacion criminal</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9102</td>
+<td style="text-align: left;">escuela de suboficiales de la fuerza aerea colombiana andres m. diaz</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9103</td>
+<td style="text-align: left;">escuela militar de aviacion marco fidel suarez</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9104</td>
+<td style="text-align: left;">escuela militar de cadetes general jose maria cordova</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9105</td>
+<td style="text-align: left;">escuela naval de cadetes almirante padilla</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9107</td>
+<td style="text-align: left;">escuela de ingenieros militares</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9108</td>
+<td style="text-align: left;">instituto caro y cuervo</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9110</td>
+<td style="text-align: left;">servicio nacional de aprendizaje-sena-</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9114</td>
+<td style="text-align: left;">servicio nacional de aprendizaje-sena-</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9116</td>
+<td style="text-align: left;">fundacion universitaria claretiana - fucla</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9116</td>
+<td style="text-align: left;">fundacion universitaria claretiana - uniclaretiana</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9117</td>
+<td style="text-align: left;">escuela internacional de estudios superiores - inter</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9117</td>
+<td style="text-align: left;">fundacion politecnica - corpo</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9119</td>
+<td style="text-align: left;">corporacion universitaria americana</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9120</td>
+<td style="text-align: left;">fundacion universitaria bellas artes</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9121</td>
+<td style="text-align: left;">fundacion universitaria colombo internacional - unicolombo</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9122</td>
+<td style="text-align: left;">universidad manuela beltran-umb-</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9124</td>
+<td style="text-align: left;">fundacion tecnologica rural - coredi</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9124</td>
+<td style="text-align: left;">tecnologico coredi</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9125</td>
+<td style="text-align: left;">universidad de antioquia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9126</td>
+<td style="text-align: left;">corporacion tecnologica indoamerica</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9127</td>
+<td style="text-align: left;">corporacion universitaria de sabaneta - unisabaneta</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9127</td>
+<td style="text-align: left;">corporacion universitaria de sabaneta j. emilio valderrama</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9128</td>
+<td style="text-align: left;">lci - fundacion tecnologica</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9129</td>
+<td style="text-align: left;">fundacion universitaria cafam</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9129</td>
+<td style="text-align: left;">fundacion universitaria cafam -unicafam</td>
+<td style="text-align: right;">101</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9131</td>
+<td style="text-align: left;">fundaci?n universitaria cervantes san agust?n - unicervantes</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9131</td>
+<td style="text-align: left;">fundacion universitaria cervantes san agustin - unicervantes</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9131</td>
+<td style="text-align: left;">fundacion universitaria cervantina san agustin - unicervantina san agustin</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9132</td>
+<td style="text-align: left;">fundacion universitaria cieo - unicieo</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9899</td>
+<td style="text-align: left;">institucion universitaria de colombia - universitaria de colombia</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9900</td>
+<td style="text-align: left;">corporacion universitaria de ciencia y tecnologia de colombia</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9900</td>
+<td style="text-align: left;">corporacion universitaria u de colombia</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9902</td>
+<td style="text-align: left;">fundacion universitaria comfenalco santander</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9903</td>
+<td style="text-align: left;">corporacion colsubsidio educacion tecnologica - cet</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9903</td>
+<td style="text-align: left;">corporacion de educacion tecnologica colsubsidio eads</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9903</td>
+<td style="text-align: left;">corporacion de educacion tecnologica colsubsidio- airbus group</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9904</td>
+<td style="text-align: left;">fundacion tecnologica colombo germana</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9904</td>
+<td style="text-align: left;">fundacion universitaria colombo germana</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9905</td>
+<td style="text-align: left;">fundacion escuela tecnologica de neiva - jesus oviedo perez -fet</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9906</td>
+<td style="text-align: left;">corporacion universitaria para el desarrollo empresarial y social- cudes</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9907</td>
+<td style="text-align: left;">fundacion universitaria navarra - uninavarra</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9910</td>
+<td style="text-align: left;">fundacion universitaria luis g. paez - uniluisgpaez</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9913</td>
+<td style="text-align: left;">corporacion universitaria de asturias</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9914</td>
+<td style="text-align: left;">elite- escuela latinoamericana de ingenieros, tecnologos y empresarios</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9914</td>
+<td style="text-align: left;">eseit - escuela superior de empresa, ingenieria y tecnologia</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9914</td>
+<td style="text-align: left;">eseit ? escuela superior de empresa, ingenier?a y tecnolog?a</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9915</td>
+<td style="text-align: left;">universitaria virtual internacional</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9918</td>
+<td style="text-align: left;">institucion universitaria conocimiento e innovacion para la justicia - cij</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9919</td>
+<td style="text-align: left;">tecnologico de energia e innovacion- e-lernova</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9920</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9921</td>
+<td style="text-align: left;">fundacion universitaria catolica del sur - unicatolica del sur</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9922</td>
+<td style="text-align: left;">fundacion universitaria comfamiliar risaralda</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9924</td>
+<td style="text-align: left;">fundacion universitaria internacional de colombia - unincol</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9926</td>
+<td style="text-align: left;">fundacion universitaria internacional de la rioja - unir</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9927</td>
+<td style="text-align: left;">institucion universitaria digital de antioquia -iu. digital</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9928</td>
+<td style="text-align: left;">fundacion universitaria salesiana</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9930</td>
+<td style="text-align: left;">institucion universitaria comando de educacion y doctrina - cedoc del ejercito nacional</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9933</td>
+<td style="text-align: left;">universidad nacional de colombia</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9934</td>
+<td style="text-align: left;">centro de estudios aeronauticos - cea</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9935</td>
+<td style="text-align: left;">unidad tecnologica del magdalena medio - utem -</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9936</td>
+<td style="text-align: left;">corporacion universitaria autonoma del norte</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> principal..o.seccional)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En esta grafica vemos que la mayoria de los datos (5000)son de principal</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> sector.ies)) <span class="sc">+</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>EN este caso vemos que casi 4000 de los datos pertenecen al sector privado</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> caracter.ies)) <span class="sc">+</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En esta grafica vemos que casi el 80% de los datos esta repartido entre institucion unicersitaria/escuela tecnologica y universidad</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> departamento.de..domicilio.de.la.ies)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En este caso observamos que el departamentos que mas repite es bogota seguido de antioquia</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_adminstrativos, <span class="fu">aes</span>(<span class="at">x =</span> municipio.de.domicilio.de.la.ies)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="EDA_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar el recuento y almacenar el resultado en una variable</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> datos_adminstrativos <span class="sc">%&gt;%</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(codigo.del..municipio..ies., municipio.de.domicilio.de.la.ies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">codigo.del..municipio..ies.</th>
+<th style="text-align: left;">municipio.de.domicilio.de.la.ies</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">5001</td>
+<td style="text-align: left;">medellin</td>
+<td style="text-align: right;">623</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5034</td>
+<td style="text-align: left;">andes</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5042</td>
+<td style="text-align: left;">santa fe de antioquia</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5042</td>
+<td style="text-align: left;">santafe de antioquia</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5045</td>
+<td style="text-align: left;">apartado</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5088</td>
+<td style="text-align: left;">bello</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5129</td>
+<td style="text-align: left;">caldas</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5148</td>
+<td style="text-align: left;">carmen de viboral</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5148</td>
+<td style="text-align: left;">el carmen de viboral</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5154</td>
+<td style="text-align: left;">caucasia</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5212</td>
+<td style="text-align: left;">copacabana</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5266</td>
+<td style="text-align: left;">envigado</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5440</td>
+<td style="text-align: left;">marinilla</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5579</td>
+<td style="text-align: left;">puerto berrio</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5615</td>
+<td style="text-align: left;">rionegro</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5631</td>
+<td style="text-align: left;">sabaneta</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5686</td>
+<td style="text-align: left;">santa rosa de osos</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5837</td>
+<td style="text-align: left;">turbo</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8001</td>
+<td style="text-align: left;">barranquilla</td>
+<td style="text-align: right;">378</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8573</td>
+<td style="text-align: left;">puerto colombia</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8758</td>
+<td style="text-align: left;">soledad</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11001</td>
+<td style="text-align: left;">bogota</td>
+<td style="text-align: right;">101</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11001</td>
+<td style="text-align: left;">bogota d.c.</td>
+<td style="text-align: right;">976</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11001</td>
+<td style="text-align: left;">bogota, d.c.</td>
+<td style="text-align: right;">1229</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13001</td>
+<td style="text-align: left;">cartagena</td>
+<td style="text-align: right;">93</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13001</td>
+<td style="text-align: left;">cartagena de indias</td>
+<td style="text-align: right;">61</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15001</td>
+<td style="text-align: left;">tunja</td>
+<td style="text-align: right;">52</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15176</td>
+<td style="text-align: left;">chiquinquira</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15238</td>
+<td style="text-align: left;">duitama</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15759</td>
+<td style="text-align: left;">sogamoso</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17001</td>
+<td style="text-align: left;">manizales</td>
+<td style="text-align: right;">67</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">17541</td>
+<td style="text-align: left;">pensilvania</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">18001</td>
+<td style="text-align: left;">florencia</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19001</td>
+<td style="text-align: left;">popayan</td>
+<td style="text-align: right;">63</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19573</td>
+<td style="text-align: left;">puerto tejada</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20001</td>
+<td style="text-align: left;">valledupar</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20011</td>
+<td style="text-align: left;">aguachica</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20621</td>
+<td style="text-align: left;">la paz</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23001</td>
+<td style="text-align: left;">monteria</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">23162</td>
+<td style="text-align: left;">cerete</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25175</td>
+<td style="text-align: left;">chia</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">25214</td>
+<td style="text-align: left;">cota</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25269</td>
+<td style="text-align: left;">facatativa</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">25290</td>
+<td style="text-align: left;">fusagasuga</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25307</td>
+<td style="text-align: left;">girardot</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">25430</td>
+<td style="text-align: left;">madrid</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25488</td>
+<td style="text-align: left;">nilo</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">25843</td>
+<td style="text-align: left;">ubate</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25843</td>
+<td style="text-align: left;">villa de san diego de ubate</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">27001</td>
+<td style="text-align: left;">quibdo</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41001</td>
+<td style="text-align: left;">neiva</td>
+<td style="text-align: right;">38</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41615</td>
+<td style="text-align: left;">rivera</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">44001</td>
+<td style="text-align: left;">riohacha</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">44650</td>
+<td style="text-align: left;">san juan del cesar</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">47001</td>
+<td style="text-align: left;">santa marta</td>
+<td style="text-align: right;">46</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">47189</td>
+<td style="text-align: left;">cienaga</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">50001</td>
+<td style="text-align: left;">villavicencio</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">52001</td>
+<td style="text-align: left;">pasto</td>
+<td style="text-align: right;">65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">52835</td>
+<td style="text-align: left;">san andres de tumaco</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">52835</td>
+<td style="text-align: left;">tumaco</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">54001</td>
+<td style="text-align: left;">cucuta</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">54001</td>
+<td style="text-align: left;">san jose de cucuta</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">54498</td>
+<td style="text-align: left;">oca?a</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">54498</td>
+<td style="text-align: left;">ocana</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">54518</td>
+<td style="text-align: left;">pamplona</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">63001</td>
+<td style="text-align: left;">armenia</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">66001</td>
+<td style="text-align: left;">pereira</td>
+<td style="text-align: right;">69</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">66682</td>
+<td style="text-align: left;">santa rosa de cabal</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">68001</td>
+<td style="text-align: left;">bucaramanga</td>
+<td style="text-align: right;">263</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">68081</td>
+<td style="text-align: left;">barrancabermeja</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">68679</td>
+<td style="text-align: left;">san gil</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">68755</td>
+<td style="text-align: left;">socorro</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">70001</td>
+<td style="text-align: left;">sincelejo</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">70221</td>
+<td style="text-align: left;">covenas</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">70820</td>
+<td style="text-align: left;">santiago de tolu</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">73001</td>
+<td style="text-align: left;">ibague</td>
+<td style="text-align: right;">43</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">73268</td>
+<td style="text-align: left;">espinal</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">73268</td>
+<td style="text-align: left;">espinal (chicoral)</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">73349</td>
+<td style="text-align: left;">honda</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">76001</td>
+<td style="text-align: left;">cali</td>
+<td style="text-align: right;">386</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">76109</td>
+<td style="text-align: left;">buenaventura</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">76111</td>
+<td style="text-align: left;">guadalajara de buga</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">76111</td>
+<td style="text-align: left;">guadalajara de buga</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">76147</td>
+<td style="text-align: left;">cartago</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">76520</td>
+<td style="text-align: left;">palmira</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">76622</td>
+<td style="text-align: left;">roldanillo</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">76834</td>
+<td style="text-align: left;">tulua</td>
+<td style="text-align: right;">116</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">81001</td>
+<td style="text-align: left;">arauca</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">85001</td>
+<td style="text-align: left;">yopal</td>
+<td style="text-align: right;">87</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">86001</td>
+<td style="text-align: left;">mocoa</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">86749</td>
+<td style="text-align: left;">sibundoy</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">88001</td>
+<td style="text-align: left;">san andres</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">91001</td>
+<td style="text-align: left;">leticia</td>
+<td style="text-align: right;">11</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#result</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

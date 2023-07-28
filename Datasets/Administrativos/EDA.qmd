@@ -14,17 +14,19 @@ En este analisis nos enfocaremos en la relacion que tienen las variables en base
 ### extraemos datos
 
 ```{r}
-#library(ggplot2)
+library(ggplot2)
+library(readr)
 # Cargamos los datos del archivo administrativos
-#datos_adminstrativos <- read.csv("Datasets/Administrativos/administrativos2014-2021.csv")
-#datos_adminstrativos
+datos_adminstrativos <- read.csv("./administrativos2014-2021.csv")
 ```
+
 
 ### Tipo de datos de nuetro dataframe
 
 ```{r}
 tipos_de_datos <- sapply(datos_adminstrativos, class)
-tipos_de_datos
+print(tipos_de_datos)
+
 ```
 
 ### Resumen estadistico de los datos
@@ -118,29 +120,17 @@ ggplot(datos_adminstrativos, aes(x = ano)) +
 
 ```
 En este caso vamos en la grafiac que el anio co mayot frecuencia de datos es el 2019
+
 ```{r}
 ggplot(datos_adminstrativos, aes(x = auxiliar)) +
   geom_histogram(binwidth = 1)
 ```
 
-```{r}
-# Cargamos el paquete dplyr si aún no lo hemos hecho
-library(dplyr)
-
-# Contamos los datos únicos en la columna 'nombre_columna'
-contador <- datos_adminstrativos %>% 
-            summarise(contador_datos_unicos = n_distinct(auxiliar))
-```
-
-```{r}
-contador
-```
 
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = servicios.tecnicos)) +
   geom_histogram(binwidth = 1)
-
 ```
 
 En esta grafica no podemos visualizar bien los datos
@@ -150,12 +140,14 @@ ggplot(datos_adminstrativos, aes(x = directivo)) +
   geom_histogram(binwidth = 1)
 
 ```
-Lo mismo que la anterior grafiac debemos buscar la forma de poder visualizar los datos de otra forma
+Lo mismo que la anterior grafica debemos buscar la forma de poder visualizar los datos de otra forma
+
 ```{r}
 ggplot(datos_adminstrativos, aes(x = profesional)) +
   geom_histogram(binwidth = 1)
 
 ```
+
 Lo mismo que el anterior
 
 ```{r}
@@ -177,6 +169,7 @@ ggplot(datos_adminstrativos, aes(x = institucion.de.educacion.superior..ies.)) +
   geom_bar()
 
 ```
+
 ```{r}
 library(dplyr)
 # Realizar el recuento y almacenar el resultado en una variable
@@ -187,9 +180,6 @@ resultad <- datos_adminstrativos %>%
 knitr::kable(resultad)
 ```
 
-```{r}
-resultad
-```
 
 
 ```{r}
@@ -197,7 +187,7 @@ ggplot(datos_adminstrativos, aes(x = principal..o.seccional)) +
   geom_bar()
 
 ```
-En esta grafica vemos que la mayoria de losd datos (5000)son de principal
+En esta grafica vemos que la mayoria de los datos (5000)son de principal
 
 ```{r}
 ggplot(datos_adminstrativos, aes(x = sector.ies)) +
@@ -211,6 +201,7 @@ ggplot(datos_adminstrativos, aes(x = caracter.ies)) +
   geom_bar()
 
 ```
+
 En esta grafica vemos que casi el 80% de los datos esta repartido entre institucion unicersitaria/escuela tecnologica y universidad
 
 ```{r}
@@ -237,6 +228,6 @@ knitr::kable(result)
 ```
 
 ```{r}
-result
+#result
 ```
 

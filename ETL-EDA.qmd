@@ -1,0 +1,268 @@
+---
+title: "ETL-EDA"
+format: html
+---
+
+## Quarto
+
+
+
+```{r}
+library(readr)
+# Cargamos los datos del archivo administrativos
+datos_adminstrativos <- read.csv("C:/Users/Lenovo/Documents/prueba tecnica/analisis_SNIES/Datasets/Administrativos/administrativos2014-2021.csv")
+
+```
+
+```{r}
+knitr::kable(datos_adminstrativos)
+```
+
+
+Vemos los nombres de las instituciones deacuerdo al ies padre para corregir posibles nombres erroneos
+
+```{r}
+library(dplyr)
+library(modeest)
+
+# Crea una función para calcular la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# Crea un DataFrame temporal que contendrá el valor más frecuente de "institucion.de.educacion.superior..ies." para cada "ies.padre"
+temp_df <- datos_adminstrativos %>%
+  group_by(ies.padre) %>%
+  summarise(institucion.de.educacion.superior..ies. = Mode(institucion.de.educacion.superior..ies.))
+
+# Cambia el nombre de la columna en temp_df
+names(temp_df)[names(temp_df) == 'institucion.de.educacion.superior..ies.'] <- 'institucion.de.educacion.superior..ies._moda'
+
+# Une este DataFrame con el df original basado en 'ies.padre'
+datos_adminstrativos <- merge(datos_adminstrativos, temp_df, by = 'ies.padre', all.x = TRUE)
+
+# Donde el valor original de "institucion.de.educacion.superior..ies." no coincide con el más frecuente (la moda), actualiza el valor original
+datos_adminstrativos$institucion.de.educacion.superior..ies.[datos_adminstrativos$institucion.de.educacion.superior..ies. != datos_adminstrativos$institucion.de.educacion.superior..ies._moda] <- datos_adminstrativos$institucion.de.educacion.superior..ies._moda[datos_adminstrativos$institucion.de.educacion.superior..ies. != datos_adminstrativos$institucion.de.educacion.superior..ies._moda]
+
+# Elimina la columna temporal
+datos_adminstrativos$institucion.de.educacion.superior..ies._moda <- NULL
+```
+
+```{r}
+library(dplyr)
+# Realizar el recuento y almacenar el resultado en una variable
+result <- datos_adminstrativos %>%
+  dplyr::count(ies.padre, institucion.de.educacion.superior..ies.)
+```
+```{r}
+knitr::kable(result)
+```
+
+Pudimos corregir los nombres de las institucionees deacuerdo al numero de ies padre para que los nombres no se repitan teniendo el mismo codigo
+
+```{r}
+library(dplyr)
+
+# Función para obtener el resumen de valores únicos en un dataframe
+obtener_resumen_valores_unicos <- function(df) {
+  # Obtener el número de valores únicos en cada columna
+  valores_unicos <- sapply(df, function(col) length(unique(col)))
+  
+  # Obtener el número total de valores en cada columna
+  total_valores <- sapply(df, function(col) sum(!is.na(col)))
+  
+  # Combinar los resultados en un nuevo dataframe
+  resumen_valores_unicos <- data.frame(
+    Columna = names(df),
+    `Valores Únicos` = valores_unicos,
+    `Total Valores` = total_valores
+  )
+  
+  return(resumen_valores_unicos)
+}
+```
+
+```{r}
+resumen <- obtener_resumen_valores_unicos(datos_adminstrativos)
+knitr::kable(resumen)
+```
+Vemos como estan los nombres deacuerdo al codsigo de la institucion
+```{r}
+library(dplyr)
+# Realizar el recuento y almacenar el resultado en una variable
+result <- datos_adminstrativos %>%
+  dplyr::count(codigo.de..la.institucion, institucion.de.educacion.superior..ies., principal..o.seccional)
+```
+```{r}
+knitr::kable(result)
+```
+
+En este caso vemos que ningun codigo de la institucion se repite por lo cual los nombres estan correctos, y lo que notamos es que si hay 4 nombres iguales con distinto codigo , es por que 1 es la principal y el resto seccional.
+
+## Ahora vamos a revisar el id sector y el sector 
+
+```{r}
+library(dplyr)
+# Realizar el recuento y almacenar el resultado en una variable
+resultsec <- datos_adminstrativos %>%
+  dplyr::count(id.sector.ies, sector.ies)
+```
+```{r}
+knitr::kable(resultsec)
+```
+
+En este caso de secctores podemos ver que todo esta correcto
+
+
+```{r}
+# Realizar el recuento y almacenar el resultado en una variable
+resultcar <- datos_adminstrativos %>%
+  dplyr::count(id.caracter.ies, caracter.ies)
+```
+```{r}
+knitr::kable(resultcar)
+```
+
+Para corregir el nombre de caracter nos basamos en la numeraciones del id caracter de la siguiente forma:
+
+```{r}
+# Crea una función para calcular la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# Crea un DataFrame temporal que contendrá el valor más frecuente de "caracter.ies" para cada "id.caracter.ies"
+temp_df <- datos_adminstrativos %>%
+  group_by(id.caracter.ies) %>%
+  summarise(caracter.ies = Mode(caracter.ies))
+
+# Cambia el nombre de la columna en temp_df
+names(temp_df)[names(temp_df) == 'caracter.ies'] <- 'caracter.ies_moda'
+
+# Une este DataFrame con el df original basado en 'id.caracter.ies'
+datos_adminstrativos <- merge(datos_adminstrativos, temp_df, by = 'id.caracter.ies', all.x = TRUE)
+
+# Donde el valor original de "caracter.ies" no coincide con el más frecuente (la moda), actualiza el valor original
+datos_adminstrativos$caracter.ies[datos_adminstrativos$caracter.ies != datos_adminstrativos$caracter.ies_moda] <- datos_adminstrativos$caracter.ies_moda[datos_adminstrativos$caracter.ies != datos_adminstrativos$caracter.ies_moda]
+
+# Elimina la columna temporal
+datos_adminstrativos$caracter.ies_moda <- NULL
+```
+
+```{r}
+# Realizar el recuento y almacenar el resultado en una variable
+resultdep <- datos_adminstrativos %>%
+  dplyr::count(codigo.del..departamento..ies., departamento.de..domicilio.de.la.ies)
+```
+```{r}
+knitr::kable(resultdep)
+```
+
+Como podemos observar hay id que se repiten con distinto nombre como en el caso anterior, asi que pasamos a corregirlo.
+
+```{r}
+# Crea una función para calcular la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# Crea un DataFrame temporal que contendrá el valor más frecuente de "departamento.de..domicilio.de.la.ies" para cada "codigo.del..departamento..ies."
+temp_df <- datos_adminstrativos %>%
+  group_by(codigo.del..departamento..ies.) %>%
+  summarise(departamento.de..domicilio.de.la.ies = Mode(departamento.de..domicilio.de.la.ies))
+
+# Cambia el nombre de la columna en temp_df
+names(temp_df)[names(temp_df) == 'departamento.de..domicilio.de.la.ies'] <- 'departamento.de..domicilio.de.la.ies_moda'
+
+# Une este DataFrame con el df original basado en 'codigo.del..departamento..ies.'
+datos_adminstrativos <- merge(datos_adminstrativos, temp_df, by = 'codigo.del..departamento..ies.', all.x = TRUE)
+
+# Donde el valor original de "departamento.de..domicilio.de.la.ies" no coincide con el más frecuente (la moda), actualiza el valor original
+datos_adminstrativos$departamento.de..domicilio.de.la.ies[datos_adminstrativos$departamento.de..domicilio.de.la.ies != datos_adminstrativos$departamento.de..domicilio.de.la.ies_moda] <- datos_adminstrativos$departamento.de..domicilio.de.la.ies_moda[datos_adminstrativos$departamento.de..domicilio.de.la.ies != datos_adminstrativos$departamento.de..domicilio.de.la.ies_moda]
+
+# Elimina la columna temporal
+datos_adminstrativos$departamento.de..domicilio.de.la.ies_moda <- NULL
+```
+
+```{r}
+# Realizar el recuento y almacenar el resultado en una variable
+resultdep <- datos_adminstrativos %>%
+  dplyr::count(codigo.del..departamento..ies., departamento.de..domicilio.de.la.ies)
+```
+```{r}
+knitr::kable(resultdep)
+```
+
+Como vemos ya corregimos el error de los nombres distintos con mismo codigo
+
+## Vemos las columnas del municipio
+
+```{r}
+# Realizar el recuento y almacenar el resultado en una variable
+resultmun <- datos_adminstrativos %>%
+  dplyr::count(codigo.del..municipio..ies., municipio.de.domicilio.de.la.ies)
+```
+```{r}
+knitr::kable(resultmun)
+```
+
+Vemos los mismo que en caso anterior de corregir todos los nombres mal escritos con el mismo codigo
+
+```{r}
+# Crea una función para calcular la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# Crea un DataFrame temporal que contendrá el valor más frecuente de "municipio.de.domicilio.de.la.ies" para cada "codigo.del..municipio..ies."
+temp_df <- datos_adminstrativos %>%
+  group_by(codigo.del..municipio..ies.) %>%
+  summarise(municipio.de.domicilio.de.la.ies = Mode(municipio.de.domicilio.de.la.ies))
+
+# Cambia el nombre de la columna en temp_df
+names(temp_df)[names(temp_df) == 'municipio.de.domicilio.de.la.ies'] <- 'municipio.de.domicilio.de.la.ies_moda'
+
+# Une este DataFrame con el df original basado en 'codigo.del..municipio..ies.'
+datos_adminstrativos <- merge(datos_adminstrativos, temp_df, by = 'codigo.del..municipio..ies.', all.x = TRUE)
+
+# Donde el valor original de "municipio.de.domicilio.de.la.ies" no coincide con el más frecuente (la moda), actualiza el valor original
+datos_adminstrativos$municipio.de.domicilio.de.la.ies[datos_adminstrativos$municipio.de.domicilio.de.la.ies != datos_adminstrativos$municipio.de.domicilio.de.la.ies_moda] <- datos_adminstrativos$municipio.de.domicilio.de.la.ies_moda[datos_adminstrativos$municipio.de.domicilio.de.la.ies != datos_adminstrativos$municipio.de.domicilio.de.la.ies_moda]
+
+# Elimina la columna temporal
+datos_adminstrativos$municipio.de.domicilio.de.la.ies_moda <- NULL
+```
+
+
+```{r}
+# Realizar el recuento y almacenar el resultado en una variable
+resultmun <- datos_adminstrativos %>%
+  dplyr::count(codigo.del..municipio..ies., municipio.de.domicilio.de.la.ies)
+```
+```{r}
+knitr::kable(resultmun)
+```
+
+Vemos que en todas las columnas con nombres basados en el id o codigo ya estan corregidos debidamente
+
+## Vemos el dataframe con los valores unicos: 
+
+```{r}
+resumen <- obtener_resumen_valores_unicos(datos_adminstrativos)
+knitr::kable(resumen)
+```
+
+
+## Ahora exportamos el dataframe para guardarlo y poder aalisar con graficas
+```{r}
+#Guardamos el dataframe en csv para despues hacer limpieza
+ruta <- "Datasets/Administrativos/"
+
+nombre_archivo <- "administrativos2014-2021final.csv"
+
+write.csv(datos_adminstrativos, file = paste0(ruta, nombre_archivo), row.names = FALSE)
+```
+

@@ -155,6 +155,8 @@ colnames(inscritos_2021) <- nombres_variables
 inscritos <- bind_rows(inscritos_2014, inscritos_2015, inscritos_2016, inscritos_2017, inscritos_2018, inscritos_2019, inscritos_2020, inscritos_2021)
 
 write.csv(inscritos, "estudiantes_inscritos.csv", row.names = FALSE)
+
+
 ```
 
 

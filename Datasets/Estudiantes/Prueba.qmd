@@ -1,6 +1,9 @@
 ---
 title: "Prueba"
 output: html_document 
+
+execute:
+  warning: false
 ---
 
 
@@ -99,7 +102,11 @@ glimpse(inscritos_2021)
 
 # Limpieza de datos
 
+## Verificación de datos
+
+
 ```{r}
+
 # Exploración inicial
 
 # Los dataset del año 2014 al 2018 tienen 33 columnas
@@ -107,7 +114,7 @@ ncol(inscritos_2014)
 # Los dataset del año 2019 al 2021 tienen 39 columnas
 ncol(inscritos_2019)
 ```
-*Observación:* Se cosidera eliminar lac columnas adicionales
+*Observación:* Se cosidera eliminar las columnas adicionales
 ```{r}
 # Eliminar columnas
 inscritos_2019 <- inscritos_2019[,-c(25:30)]
@@ -115,8 +122,32 @@ inscritos_2020 <- inscritos_2020[,-c(25:30)]
 inscritos_2021 <- inscritos_2021[,-c(25:30)]
 ```
 
+# Combinar datasets
+
+
+## Verificación del nombre de las variables
+
 ```{r}
-# Eliminar filas del dataset inscritos_2016 que contienen datos como "SIN PROGRAMA ESPECÍFICO", y "No aplica"
-inscritos_2016 <- inscritos_2016[-(4211:4282), ]
+names_2014 <- names(inscritos_2014)
+
+
+```
+
+
+*Observación:* Si bien el resultado muestra que existen variables que no son las mismas, pero el valor que contienen corresponde al mismo.
+
+
+## Combinar dataset y generar un archivo .csv
+```{r}
+# Combinar todos los datasets en un solo data frame
+library(dplyr)
+inscritos <- bind_rows(lista_inscritos)
+
+nombres_columnas <- colnames(inscritos)
+nombres_columnas[length(nombres_columnas)] <- "cantidad_inscritos"
+colnames(inscritos) <- nombres_columnas
+
+# Guardar el data frame combinado en un archivo CSV
+write.csv(inscritos, "estudiantes_inscritos.csv", row.names = FALSE)
 ```
 

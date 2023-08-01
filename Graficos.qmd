@@ -56,7 +56,7 @@ knitr::kable(datos_por_año)
 fig
 ```
 
-De esta grafica el dato que podemos observar al es encremento despues de un ano en baja, la suma de administradores que se fueron agregando cada ano, y vemos que en los ultimos anos estaria lateral o la cantidad de administradores se mantiene. 
+De esta grafica el dato que podemos observar es el incremento, despues de un ano en baja, la suma de administradores que se fueron agregando cada ano, y vemos que en los ultimos anos estaria lateral o la cantidad de administradores se mantiene el cual se lo puede asociar a la pandemia
 
 ## Ahora contamos la cantidad de administradores por semestre
 
@@ -86,7 +86,10 @@ knitr::kable(datos_por_semestre)
 fig
 ```
 
-En este caso podemos ver que la proporcion de administrativos por semestre no es tan relevantes por que tienden a ser casi iguales 
+En este caso podemos ver que la proporcion de administrativos por semestre no es tan relevantes o importante para el analisis por que tienden a ser casi iguales 
+
+
+## Cantidad de administrativos por institucion
 
 ```{r}
 # Calcular el total de inscripciones por categoría NBC
@@ -120,7 +123,7 @@ fig <- plot_ly(df_top10,
 fig
 ```
 
-Las conclusiones de esta grafica son que las 3 universidades con mayor cantidad de administrativos son la U. Javeriana, U. Minuto de dios y la U. de los Andes con sus respectivas cantidades
+Despues de agrupar los administrativos por institucion, las conclusiones de esta grafica son que las 3 universidades con mayor cantidad de administrativos son la U. Javeriana, U. Minuto de dios y la U. de los Andes con sus respectivas cantidades
 
 ## Vamos a revisar la cantidad de administrativos por departamento 
 
@@ -157,9 +160,9 @@ fig
 ```
 
  
-En este caso podemos observar que los departamentos que mas administrativos tiene es bogota dc, seguido por antioquia y tercero valle del cauca
+En este caso podemos observar que los departamentos que mas administrativos tiene es bogota dc, seguido por antioquia y tercero valle del cauca, lo que si estariamos en un analisis de gastos podriamos observar que esos departamentos son los que mas gastos tienen.
 
-## Vemos la cantidad de administrativos encada departamento 
+## Vemos la cantidad de administrativos en cada departamento 
 
 ```{r}
 # Cargar el paquete plotly
@@ -208,8 +211,40 @@ fig
 ```
 
 
-Vemos que el secctor que mas administrativos tiene es el sector privado con 650259 administrativos
+Vemos que el secctor que mas administrativos tiene es el sector privado con 650259 administrativos, teniendo asi mas del 50% del total 
+
+
 ## Vemos que porcentaje represeenta cada area de administracion en el total
+```{r}
+# el objetivo era mostrar un grafico de tortas, mostrando el porcentaje de cada area en el total de administrativos
+library(dplyr)
+# Crear un nuevo DataFrame con las cuatro columnas seleccionadas
+df_areas <- datos_para_grafico %>% select(auxiliar, servicios.tecnicos, profesional, directivo)
+```
+
+```{r}
+knitr::kable(df_areas)
+```
+
+```{r}
+#libreria ggplot
+library(ggplot2)
+
+# Calcular los totales de cada columna
+totales <- colSums(df_areas)
+
+# Crear el DataFrame 'totales' con los nombres de cada columna
+df_totales <- data.frame(categoria = names(totales), valor = totales)
+
+# Crear el gráfico de torta con ggplot2
+ggplot(df_totales, aes(x = "", y = valor, fill = categoria)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste(categoria, scales::percent(valor / sum(valor))), y = valor / 2), position = position_stack(vjust = 0.5)) +
+  labs(fill = "Area", x = NULL, y = NULL, title = "Totales por area")
+```
+
+En este caso podemos observar el porcentaje que represennta cada area en el toral de administrativos, lo cual vemos que el area con mayor porcentaje es profesionales con un 37.5% 
 
 ##Vamos aver la cantidad de administrativos por municipio de ada departamento
 
@@ -247,6 +282,6 @@ fig <- plot_ly(df_agrupado,
 fig
 ```
 
+Este grafico fue con el fin de poder ver las cantidades de administrativos de un municipio dentro de cada departamento para ver como esta distribuido
 
-
-
+Eso es todo.

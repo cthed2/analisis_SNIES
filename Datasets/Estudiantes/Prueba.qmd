@@ -114,9 +114,35 @@ inscritos_2019 <- inscritos_2019[,-c(25:30)]
 inscritos_2020 <- inscritos_2020[,-c(25:30)]
 inscritos_2021 <- inscritos_2021[,-c(25:30)]
 ```
+# Combinar datasets
 
 ```{r}
-# Eliminar filas del dataset inscritos_2016 que contienen datos como "SIN PROGRAMA ESPECÍFICO", y "No aplica"
-inscritos_2016 <- inscritos_2016[-(4211:4282), ]
-```
 
+# Verificación del nombre de las variables
+inscritos_2014 <- inscritos_2014 %>% mutate_all(as.character)
+inscritos_2015 <- inscritos_2015 %>% mutate_all(as.character)
+inscritos_2016 <- inscritos_2016 %>% mutate_all(as.character)
+inscritos_2017 <- inscritos_2017 %>% mutate_all(as.character)
+inscritos_2018 <- inscritos_2018 %>% mutate_all(as.character)
+inscritos_2019 <- inscritos_2019 %>% mutate_all(as.character)
+inscritos_2020 <- inscritos_2020 %>% mutate_all(as.character)
+inscritos_2021 <- inscritos_2021 %>% mutate_all(as.character)
+
+# Obtener los nombres de las variables del primer dataset
+inscritos_2014 <- inscritos_2014 %>% rename(cantidad_incritos = inscritos_2014)
+
+nombres_variables <- colnames(inscritos_2014)
+
+colnames(inscritos_2015) <- nombres_variables
+colnames(inscritos_2016) <- nombres_variables
+colnames(inscritos_2017) <- nombres_variables
+colnames(inscritos_2018) <- nombres_variables
+colnames(inscritos_2019) <- nombres_variables
+colnames(inscritos_2020) <- nombres_variables
+colnames(inscritos_2021) <- nombres_variables
+
+
+inscritos <- bind_rows(inscritos_2014, inscritos_2015, inscritos_2016, inscritos_2017, inscritos_2018, inscritos_2019, inscritos_2020, inscritos_2021)
+
+write.csv(inscritos, "estudiantes_inscritos.csv", row.names = FALSE)
+```

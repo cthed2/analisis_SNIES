@@ -125,10 +125,9 @@ inscritos_2021 <- inscritos_2021[,-c(25:30)]
 # Combinar datasets
 
 
-## Verificación del nombre de las variables
-
 ```{r}
 
+# Verificación del nombre de las variables
 inscritos_2014 <- inscritos_2014 %>% mutate_all(as.character)
 inscritos_2015 <- inscritos_2015 %>% mutate_all(as.character)
 inscritos_2016 <- inscritos_2016 %>% mutate_all(as.character)
@@ -138,7 +137,7 @@ inscritos_2019 <- inscritos_2019 %>% mutate_all(as.character)
 inscritos_2020 <- inscritos_2020 %>% mutate_all(as.character)
 inscritos_2021 <- inscritos_2021 %>% mutate_all(as.character)
 
-## Obtener los nombres de las variables del primer dataset
+# Obtener los nombres de las variables del primer dataset
 inscritos_2014 <- inscritos_2014 %>% rename(cantidad_incritos = inscritos_2014)
 
 nombres_variables <- colnames(inscritos_2014)
@@ -155,8 +154,6 @@ colnames(inscritos_2021) <- nombres_variables
 inscritos <- bind_rows(inscritos_2014, inscritos_2015, inscritos_2016, inscritos_2017, inscritos_2018, inscritos_2019, inscritos_2020, inscritos_2021)
 
 write.csv(inscritos, "estudiantes_inscritos.csv", row.names = FALSE)
-
-
 ```
 
 

@@ -1,0 +1,12 @@
+---
+title: "Análisis de Estudiantes Inscritos"
+author: "Jalorca"
+output: html_document
+---
+
+```{r Librerias}
+#| warning: false
+library(dplyr)
+library(readr)
+```
+

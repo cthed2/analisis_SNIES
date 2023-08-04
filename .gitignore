@@ -3,8 +3,8 @@
 .RData
 .Ruserdata
 
-Datasets/Estudiantes/Prueba.html
-Datasets/Estudiantes/Prueba_files
+Datasets/Estudiantes/*.html
+Datasets/Estudiantes/*_files
 
 /venv/
 /env/

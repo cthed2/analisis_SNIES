@@ -221,7 +221,7 @@ ggplot(datos_adminstrativos, aes(x = municipio.de.domicilio.de.la.ies)) +
 library(dplyr)
 # Realizar el recuento y almacenar el resultado en una variable
 result <- datos_adminstrativos %>%
-  dplyr::count(codigo.del..municipio..ies., municipio.de.domicilio.de.la.ies)
+  dplyr::count(ies.padre, institucion.de.educacion.superior..ies.)
 ```
 ```{r}
 knitr::kable(result)

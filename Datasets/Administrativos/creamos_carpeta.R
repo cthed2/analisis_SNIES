@@ -25,7 +25,7 @@ colnames(data2017)
 data2017$X <- NULL 
 
 
-# pasamos el contenido y e nombre de columnas a minusculas
+# pasamos el contenido y el nombre de columnas a minusculas
 
 #------------------------------------------------------------
 # Lista de nombres de los 8 dataframes
@@ -91,6 +91,7 @@ colnames(data2021)[colnames(data2021) == "carácter.ies"] <- "caracter.ies"
 
 #--------------------------------------------------------------------------------------------------
 
+#--------------------------------------------------------------------------------------------------
 # Vamos a concatenar todos los archivos en uno solo
 
 library(dplyr)
@@ -113,11 +114,16 @@ print(nulos_por_columna)
 
 #-------------------------------------------------------------------------------
 
+
+#---------------------------------------------------------------------------------
+
 # Vemos los valores quetiene cada columna: vemos que tiene un valor no adecuado "#n/d" y lo reeamplazamos por prricipal
 valores_unicos <- unique(df_concatenado$principal..o.seccional)
 print(valores_unicos)
+#---------------------------------------------------------------------------------------
 
-# Reemplazamos "#n/d" 
+
+# Reemplazamos "#n/d"  por principal, tomamos ese criterio por que nos basamso e que principal es la sede
 df_concatenado$principal..o.seccional <- ifelse(df_concatenado$principal..o.seccional == "#n/d", "principal", df_concatenado$principal..o.seccional)
 
 #---------------------------------------------------------------------------------
@@ -152,8 +158,5 @@ ruta <- "Datasets/Administrativos/"
 nombre_archivo <- "administrativos2014-2021.csv"
 
 write.csv(df_concatenado, file = paste0(ruta, nombre_archivo), row.names = FALSE)
+#---------------------------------------------------------------------------------
 
-
-# cambioo
-
-# cambio2

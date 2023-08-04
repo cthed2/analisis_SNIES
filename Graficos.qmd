@@ -1,0 +1,287 @@
+---
+title: "Analisis con Graficas"
+format: html
+---
+
+## Analisaremos los datos con graficos en plotly
+
+# Instalamos plotly y las librerias necesarias
+
+
+
+```{r}
+install.packages("remotes")
+remotes::install_github("plotly/dashR", upgrade = "always")
+```
+
+Librerias
+
+```{r}
+library(plotly)
+library(tidyverse)
+library(readr)
+library(dplyr)
+```
+
+Importamos el archivo necesario para graficar los datos
+
+```{r}
+# Cargar los datos (reemplaza 'ruta_del_archivo.csv' por la ubicación de tus datos)
+datos_para_grafico <- read.csv("C:/Users/Lenovo/Documents/prueba tecnica/analisis_SNIES/Datasets/Administrativos/administrativos2014-2021final.csv")
+```
+
+# Grafico por anio
+
+```{r}
+# Agrupar los datos por año y sumar los estudiantes inscritos por año
+datos_por_año <- datos_para_grafico %>%
+  group_by(ano) %>%
+  summarise(total = sum(total)) %>%
+  ungroup()
+
+# Crear la gráfica de líneas utilizando plot_ly
+fig <- plot_ly(datos_por_año, x = ~ano, y = ~total, type = 'scatter', mode = 'lines+markers')
+
+# Establecer el título del gráfico
+fig <- fig %>% layout(title = 'Total de Administradores por Año')
+```
+
+```{r}
+knitr::kable(datos_por_año)
+```
+
+
+
+```{r}
+fig
+```
+
+De esta grafica el dato que podemos observar es el incremento, despues de un ano en baja, la suma de administradores que se fueron agregando cada ano, y vemos que en los ultimos anos estaria lateral o la cantidad de administradores se mantiene el cual se lo puede asociar a la pandemia
+
+## Ahora contamos la cantidad de administradores por semestre
+
+```{r}
+# Agrupar los datos por sexo y contar cuántos estudiantes hay en cada categoría
+datos_por_semestre <- datos_para_grafico %>%
+  group_by(semestre) %>%
+  summarise(total = n()) %>%
+  ungroup()
+
+# Calcular el porcentaje de estudiantes inscritos por sexo
+datos_por_semestre <- datos_por_semestre %>%
+  mutate(Porcentaje = (total / sum(total)) * 100)
+
+# Crear el gráfico de pastel utilizando plot_ly
+fig <- plot_ly(datos_por_semestre, values = ~Porcentaje, labels = ~semestre, 
+               type = 'pie', textinfo = 'label+percent',
+               title = 'Porcentaje de Administradores según el Semestre')
+```
+
+```{r}
+knitr::kable(datos_por_semestre)
+```
+
+
+```{r}
+fig
+```
+
+En este caso podemos ver que la proporcion de administrativos por semestre no es tan relevantes o importante para el analisis por que tienden a ser casi iguales 
+
+
+## Cantidad de administrativos por institucion
+
+```{r}
+# Calcular el total de inscripciones por categoría NBC
+df_sum <- datos_para_grafico %>%
+  group_by(`institucion.de.educacion.superior..ies.`) %>%
+  summarise(total = sum(total)) %>%
+  ungroup()
+
+# Filtrar las categorías "no aplica"
+df_filtered <- df_sum %>%
+  filter(`institucion.de.educacion.superior..ies.` != 'no aplica')
+
+# Seleccionar el top 10 de categorías con el mayor número de inscripciones
+df_top10 <- df_filtered %>%
+  arrange(desc(total)) %>%
+  slice_head(n = 10)
+```
+
+```{r}
+# Crear el gráfico de barras utilizando plot_ly
+fig <- plot_ly(df_top10, 
+               x = ~total,
+               y = ~`institucion.de.educacion.superior..ies.`,
+               type = "bar",
+               orientation = 'h',
+               text = ~paste('Administrativos: ', total),
+               hoverinfo = "text",
+               title = "Top 10 instituciones con mas administrativos")
+
+# Mostrar el gráfico
+fig
+```
+
+Despues de agrupar los administrativos por institucion, las conclusiones de esta grafica son que las 3 universidades con mayor cantidad de administrativos son la U. Javeriana, U. Minuto de dios y la U. de los Andes con sus respectivas cantidades
+
+## Vamos a revisar la cantidad de administrativos por departamento 
+
+```{r}
+# Calcular el total de inscripciones por categoría NBC
+df_sum1 <- datos_para_grafico %>%
+  group_by(`departamento.de..domicilio.de.la.ies`) %>%
+  summarise(total = sum(total)) %>%
+  ungroup()
+
+# Filtrar las categorías "no aplica"
+df_filtered1 <- df_sum1 %>%
+  filter(`departamento.de..domicilio.de.la.ies` != 'no aplica')
+
+# Seleccionar el top 10 de categorías con el mayor número de inscripciones
+df_top10d <- df_filtered1 %>%
+  arrange(desc(total)) %>%
+  slice_head(n = 10)
+```
+
+```{r}
+# Crear el gráfico de barras utilizando plot_ly
+fig <- plot_ly(df_top10d, 
+               x = ~total,
+               y = ~`departamento.de..domicilio.de.la.ies`,
+               type = "bar",
+               orientation = 'h',
+               text = ~paste('Administrativos: ', total),
+               hoverinfo = "text",
+               title = "Top 10 Departamentos con mas administrativos")
+
+# Mostrar el gráfico
+fig
+```
+
+ 
+En este caso podemos observar que los departamentos que mas administrativos tiene es bogota dc, seguido por antioquia y tercero valle del cauca, lo que si estariamos en un analisis de gastos podriamos observar que esos departamentos son los que mas gastos tienen.
+
+## Vemos la cantidad de administrativos en cada departamento 
+
+```{r}
+# Cargar el paquete plotly
+library(plotly)
+
+# Crear el gráfico de árbol utilizando plot_ly
+fig <- plot_ly(datos_para_grafico, 
+               type = "treemap",
+               path = ~`departamento.de..domicilio.de.la.ies`,
+               values = ~total,
+               title = "Mapa de árbol de Administrativos por Departamento de domicilio de la IES",
+               color = ~total,
+               colors = px.colors.qualitative.Prism
+)
+
+# Mostrar el gráfico
+fig
+```
+
+## Vemos los administrativos por sector
+
+```{r}
+# Agrupa tus datos por Metodología y suma las Inscripciones
+df_grouped <- datos_para_grafico %>%
+  group_by(sector.ies) %>%
+  summarise(total = sum(total)) %>%
+  ungroup()
+
+# Ordena por inscripciones en orden descendente
+df_grouped <- df_grouped %>%
+  arrange(desc(total))
+```
+
+```{r}
+# Crear el gráfico de barras utilizando plot_ly
+fig <- plot_ly(df_grouped, 
+               x = ~sector.ies, 
+               y = ~total, 
+               type = "bar",
+               text = ~paste('Administrativos: ', total),
+               hoverinfo = "text",
+               title = "Administrativos por sector")
+
+# Mostrar el gráfico
+fig
+```
+
+
+Vemos que el secctor que mas administrativos tiene es el sector privado con 650259 administrativos, teniendo asi mas del 50% del total 
+
+
+## Vemos que porcentaje represeenta cada area de administracion en el total
+```{r}
+# el objetivo era mostrar un grafico de tortas, mostrando el porcentaje de cada area en el total de administrativos
+library(dplyr)
+# Crear un nuevo DataFrame con las cuatro columnas seleccionadas
+df_areas <- datos_para_grafico %>% select(auxiliar, servicios.tecnicos, profesional, directivo)
+```
+
+```{r}
+knitr::kable(df_areas)
+```
+
+```{r}
+#libreria ggplot
+library(ggplot2)
+
+# Calcular los totales de cada columna
+totales <- colSums(df_areas)
+
+# Crear el DataFrame 'totales' con los nombres de cada columna
+df_totales <- data.frame(categoria = names(totales), valor = totales)
+
+# Crear el gráfico de torta con ggplot2
+ggplot(df_totales, aes(x = "", y = valor, fill = categoria)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste(categoria, scales::percent(valor / sum(valor))), y = valor / 2), position = position_stack(vjust = 0.5)) +
+  labs(fill = "Area", x = NULL, y = NULL, title = "Totales por area")
+```
+
+En este caso podemos observar el porcentaje que represennta cada area en el toral de administrativos, lo cual vemos que el area con mayor porcentaje es profesionales con un 37.5% 
+
+##Vamos aver la cantidad de administrativos por municipio de ada departamento
+
+
+```{r}
+# Supongamos que tienes un dataframe llamado "datos" con las columnas "departamentos", "municipio" y "total".
+
+# Utilizamos la función group_by() para agrupar por "departamentos" y "municipio" y luego la función summarise() para sumar la columna "total".
+df_agrupado <- datos_para_grafico %>%
+  group_by(departamento.de..domicilio.de.la.ies, municipio.de.domicilio.de.la.ies) %>%
+  summarise(total_sumado = sum(total))
+
+# El resultado es un nuevo dataframe "df_agrupado" que contiene la suma de la columna "total" para cada combinación única de "departamentos" y "municipio".
+```
+
+
+
+```{r}
+knitr::kable(df_agrupado)
+```
+
+```{r}
+# Supongamos que tienes el dataframe "df_agrupado" con las columnas "departamentos", "municipio" y "total_sumado".
+
+# Crear el gráfico de barras utilizando plot_ly
+fig <- plot_ly(df_agrupado, 
+               x = ~departamento.de..domicilio.de.la.ies, 
+               y = ~total_sumado, 
+               type = "bar",
+               text = ~paste("Municipio: ", municipio.de.domicilio.de.la.ies, "<br>Total: ", total_sumado),
+               hoverinfo = "text",
+               title = "Suma de Total por Departamentos y Municipios")
+
+# Mostrar el gráfico
+fig
+```
+
+Este grafico fue con el fin de poder ver las cantidades de administrativos de un municipio dentro de cada departamento para ver como esta distribuido
+
+Eso es todo.

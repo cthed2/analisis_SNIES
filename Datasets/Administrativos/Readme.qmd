@@ -1,0 +1,41 @@
+---
+title: "Readme"
+format: html
+---
+
+## Proyecto de Analisis de datos de las  Instituciones de Educación Superior de Colombia
+
+El contenido de los archivos lo podras encontrar en la pagina siguiente <https://snies.mineducacion.gov.co/portal/ESTADISTICAS/Bases-consolidadas/>.
+
+### Estructura del proyecto
+
+**Creamos carpeta.R** --> Es el script que contiene una parte de la limpieza de los datos, donde extraemos los datos de la carpeta y los guardamos en un dataframe para poder trabajar, el primer cambio que realizamos fue eliminar una columna de nulos de data2017, seguido de eso pasamos todo el archivo a minisculas para que este todo los datos unificados, el suiguiente paso fue eliminar los acentos para que no traiga problemas al momento de concatenarlos, despues cambios algunos nombres de las columnas para que todo este igual y no tengamos conflictos mas adelante, finalmente concatenamos todos los dataframe. Despues de tener el dataframe con todos los archivos analisamos los nulos que tenian el cual no habia nulos, revisamos los datos unicos de de la columna "principal o seccional" y  corregimos los "#n/d"  por principal asumiendo que eran la sede central, verificamos tambien el tipo de dato de cada columna y vimos que habia columnas que tendrian que ser numericas y procedimos o corregirlo poniendo el tipo de dato adecuado. Finalmente sacamos los acentos de los nombres de las columnas y terminamos exportando el datyaframe como csv "administrativos2014-2021.csv"
+
+**ETL-EDA** --> Este es un archivo Quarto Document donde contiene la segunda trannsformacion de los datos y lo primero que hicimos fue traer el archivo exportado del script anterior para trabajar en base a ese, despues vimos los nombres de las instituciones de acuerdo al ies padre para corregir posibles nombres erroneos ya que cada ies padre debe pertenecer a una institicion y los nombres no se repitan, Despues revisar la columna sector el cual vemos que todo esta correcto.Pasamos a la columna caracter lo cual vemos que tambien tiene nombres repetidos en base al codigo de caracter, tambien corregimos la columna Departamento, municipio basandonos en su correspondiente codigo para que no tengo codigos repetidos con distinos nombres, finalmente exportamos el csv para poner hacer graficas con los datos ya limpios.
+
+**EDA** --> Este archivo contiene graficos exploratorios de cada columna individual para poder identificar algunos datos relevantes y poder entender los datos mas en profundidad
+
+**Graficos** --> En este archivo estan todos los graficos en los cuales podemos visualizar los datos y poder sacar conclusiones de la informacion:
+
+#### Grafico de linea por ano de los totales de administradores
+En este grafico podemos ver que en el primer ano hubo una disminucion de administartivos llegando a pasar de 110k a 65k lo cual desconocemos las consecuencias, despues de el ano 2015 el incremento de los administrativos fue durante 4 anos seguidos llegando al 2020 ese incremento se vio con mas debilidad y para erl ano 2021 hubo una disminucion de los administrativos lo cual lo podemos asociar a la pandemia el comportamiento de los dos ultimos anos
+
+#### Grafico de torta de la cantidad de administrativos por semestre 
+En este grafico no pudimos encontrar mucho valor ya que no habia una diferencia marcada entre el semestre 1 y 2. 
+
+#### Grafico del total de administrativos por institucion 
+En este grafico lo que observamos es que la institucion con mayor cantidad de administrativos es Universidad Ponteficia Javeriana, seguido por la Coorporacion Universitaria Miunuto de dios y la tercera es la universidad de los andes
+
+#### Grafico de top 10 departamentos con mayor cantidad de administrativos
+En este grafico observamos que los departamentos  con mayor cantidad son en primer lugar Bogota, seguido por Antioquia y tercero Valle del cauca
+
+#### Grafico de barras paara representar la cantidad de administrativos por sector
+En este grafico la conclusion que observamos es que el sector privado es el que mayor cantidad de administartivos acumula con 650259
+
+#### Grafico de torta de cada area del total de administrativos
+Las conclusiones que podemos traer de este grafico es que el area que mayor porcentaje de adiminstardores que tiene es profesionales con un 37.5%, seguido por auxiliar con un 32,8%, servicios tecnicos con un 19% y directivos con el 10%
+
+#### Grafico de cantidad de administrativos por municipio dentro de cada departamento
+Este grafico fue con el fin de poder ver las cantidades de administrativos de un municipio dentro de cada departamento para ver como esta distribuido
+
+

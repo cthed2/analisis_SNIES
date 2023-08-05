@@ -22,6 +22,7 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 ```
+
 # Dataset
 Se cargo el dataset preparado de los archivos descargados de la fuente, *estudiantes_inscritos.csv*.
 
@@ -32,6 +33,7 @@ estudiantes_incritos <- read.csv("estudiantes_inscritos.csv")
 ```{r Previsualización de Data}
 glimpse(estudiantes_incritos)
 ```
+
 
 # Cosideraciones
 
@@ -357,6 +359,7 @@ estudiantes_incritos <- estudiantes_incritos %>%
   ))
 ```
 
+
 # Tablas de datos unicos
 
 ## Instituciones
@@ -429,6 +432,18 @@ municipio_oferta_programa <- estudiantes_incritos %>% count(codigo_del_municipio
 ```{r}
 genero <- estudiantes_incritos %>% count(id_genero,genero)
                              
+```
+
+
+# Analisis
+
+```{r}
+summary(estudiantes_incritos$cantidad_incritos)
+```
+
+```{r}
+ggplot(estudiantes_incritos, aes(x = sector , y = cantidad_inscritos)) + geom_point()
+
 ```
 
 

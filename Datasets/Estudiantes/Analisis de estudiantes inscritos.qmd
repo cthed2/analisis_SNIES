@@ -437,14 +437,114 @@ genero <- estudiantes_incritos %>% count(id_genero,genero)
 
 # Analisis
 
+## Gráfico de barras para visualizar la cantidad de inscritos por nivel académico
 ```{r}
-summary(estudiantes_incritos$cantidad_incritos)
+ggplot(estudiantes_incritos, aes(x = nivel_academico, y = cantidad_incritos)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Cantidad de inscritos por nivel académico",
+       x = "Nivel académico",
+       y = "Cantidad de inscritos")
+```
+## Gráfico de puntos para visualizar la relación entre el año y la cantidad de inscritos
+
+```{r}
+ggplot(estudiantes_incritos, aes(x = nivel_academico, y = cantidad_incritos, fill = genero)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Cantidad de inscritos por género y nivel académico",
+       x = "Nivel académico",
+       y = "Cantidad de inscritos",
+       fill = "Género")
+```
+## Diagrama circular entre cantidad de inscritos y genero
+```{r}
+datos_resumidos <- estudiantes_incritos %>%
+  group_by(genero) %>%
+  summarise(cantidad_incritos = sum(cantidad_incritos))
+
+total_incritos <- sum(datos_resumidos$cantidad_incritos)
+
+datos_resumidos <- datos_resumidos %>%
+  mutate(porcentaje = (cantidad_incritos / total_incritos) * 100)
+
+
+ggplot(datos_resumidos, aes(x = "", y = porcentaje, fill = genero)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  labs(title = "Proporción de inscritos por género",
+       x = NULL,
+       y = NULL) +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        panel.grid = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        legend.title = element_blank()) +  # Eliminar título de la leyenda
+  geom_text(aes(label = paste(round(porcentaje, 1), "%")), position = position_stack(vjust = 0.5))
+```
+
+## Gráfico lineal para visualizar la relación entre el año y la cantidad de inscritos
+```{r}
+datos_resumidos <- estudiantes_incritos %>%
+  group_by(ano) %>%
+  summarise(cantidad_incritos = sum(cantidad_incritos))
+
+ggplot(datos_resumidos, aes(x = ano, y = cantidad_incritos)) +
+  geom_line() +
+  labs(title = "Variación de la cantidad de inscritos por año",
+       x = "Año",
+       y = "Cantidad de inscritos")
+```
+## Gráfico lineal para visualizar la relación entre el año y la cantidad de inscritos por area de conocimiento
+```{r}
+datos_resumidos <- estudiantes_incritos %>%
+  group_by(ano, area_de_conocimiento) %>%
+  summarise(cantidad_incritos = sum(cantidad_incritos))
+
+ggplot(datos_resumidos, aes(x = ano, y = cantidad_incritos, color = area_de_conocimiento)) +
+  geom_line() +
+  labs(title = "Evolución de la cantidad de inscritos por año y área de conocimiento",
+       x = "Año",
+       y = "Cantidad de inscritos",
+       color = "Área de conocimiento") +
+  scale_color_discrete(name = "Área de conocimiento")+
+  theme(legend.text = element_text(size = 5))
+```
+# Grafica de estudiantes inscritos vs sector
+```{r}
+# Resumir los datos por sector y sumar la cantidad de inscritos en cada caso
+datos_resumidos <- estudiantes_incritos %>%
+  group_by(sector_ies) %>%
+  summarise(cantidad_incritos = sum(cantidad_incritos))
+
+# Crear la gráfica de barras
+ggplot(datos_resumidos, aes(x = sector_ies, y = cantidad_incritos, fill = sector_ies)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Cantidad de estudiantes inscritos por sector",
+       x = "Sector",
+       y = "Cantidad de estudiantes inscritos") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  guides(fill = FALSE)  # Para ocultar la leyenda
+
 ```
 
 ```{r}
-ggplot(estudiantes_incritos, aes(x = sector , y = cantidad_inscritos)) + geom_point()
+# Resumir los datos por nivel de formación y sumar la cantidad de inscritos en cada caso
+datos_resumidos <- estudiantes_incritos %>%
+  group_by(nivel_de_formacion) %>%
+  summarise(cantidad_incritos = sum(cantidad_incritos))
 
+# Crear la gráfica de barras
+ggplot(datos_resumidos, aes(x = nivel_de_formacion, y = cantidad_incritos, fill = nivel_de_formacion)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Cantidad de estudiantes inscritos por nivel de formación",
+       x = "Nivel de formación",
+       y = "Cantidad de estudiantes inscritos") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),  # Ajustar tamaño de fuente del eje x
+        axis.text.y = element_text(size = 8),  # Ajustar tamaño de fuente del eje y
+        axis.title.x = element_text(size = 5),  # Ajustar tamaño de fuente del título del eje x
+        axis.title.y = element_text(size = 10),  # Ajustar tamaño de fuente del título del eje y
+        plot.title = element_text(size = 12),   # Ajustar tamaño de fuente del título del gráfico
+        legend.position = "none")  # Ocultar la leyenda
 ```
-
-
 
